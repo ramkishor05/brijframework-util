@@ -79,35 +79,47 @@ public class PropertyAccessorUtil{
 		Assertion.notNull(field, AssertMessage.field_name_null_message);
 		AccessibleObject colling = MetaAccessorUtil.getPropertyMeta(bean.getClass(), field, Access.PRIVATE);
 		Assertion.notNull(colling, AssertMessage.unbounded_key_message + " " + field);
-		return getProperty(bean, colling);
+		return getProperty(bean, colling, level);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static <T> T getProperty(Object bean,AccessibleObject colling) {
+	public static <T> T getProperty(Object bean,AccessibleObject colling,Access level) {
 		Assertion.notNull(colling, AssertMessage.field_object_null_message );
 		try {
 			if (colling instanceof Method) {
-				Method invoker = (Method) colling;
-				invoker.setAccessible(true);
-				return (T) invoker.invoke(bean);
+				return getProperty(bean, (Method)colling,level);
 			}
 			if (colling instanceof Field) {
-				return getProperty(bean, (Field)colling);
+				return getProperty(bean, (Field)colling,level);
 			}
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		} catch (IllegalArgumentException e) {
 			LogTracker.trace(PropertyAccessorUtil.class.getSimpleName() + "_getProperty", LogAccess.DEVELOPER, "AccessException",e);
 		}
 		return null;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T> T getProperty(Object bean,Method colling) {
+	public static <T> T getProperty(Object bean,Method colling, Access access) {
 		Assertion.notNull(colling, AssertMessage.field_object_null_message );
+		Assertion.isTrue(!access.isAccess(colling.getModifiers()), AssertMessage.unauth_access_message + " " + colling.getName());
 		try {
 			colling.setAccessible(true);
 			return (T) colling.invoke(bean);
 		}
 		catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			LogTracker.trace(PropertyAccessorUtil.class.getSimpleName() + "_getProperty", LogAccess.DEVELOPER, "AccessException",e);
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T getProperty(Object bean,Field colling, Access access) {
+		Assertion.notNull(colling, AssertMessage.field_object_null_message );
+		Assertion.isTrue(!access.isAccess(colling.getModifiers()), AssertMessage.unauth_access_message + " " + colling.getName());
+		try {
+			colling.setAccessible(true);
+			return (T) colling.get(bean);
+		}
+		catch (IllegalAccessException | IllegalArgumentException e) {
 			LogTracker.trace(PropertyAccessorUtil.class.getSimpleName() + "_getProperty", LogAccess.DEVELOPER, "AccessException",e);
 		}
 		return null;

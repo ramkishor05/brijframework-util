@@ -29,7 +29,6 @@ public class ResourcesUtil {
 	private static final String ResourcesLoader_getLisFromJsonFile = "ResourcesLoader_getLisFromJsonFile";
 	private static final String ResourcesLoader_dirCreate = "ResourcesLoader_dirCreate";
 
-
 	public static Collection<? extends File> getCurrentResources(String path, String extesions) throws IOException {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		return getCurrentResources(classLoader, path, extesions);
@@ -67,7 +66,7 @@ public class ResourcesUtil {
 		return files;
 	}
 
-	public static ArrayList<File> getResources(ClassLoader classLoader, String path, String... extesions)
+	public static List<File> getResources(ClassLoader classLoader, String path, String... extesions)
 			throws IOException {
 		Enumeration<URL> resources = classLoader.getResources(path);
 		List<File> dirs = new ArrayList<File>();
@@ -75,23 +74,24 @@ public class ResourcesUtil {
 			URL resource = resources.nextElement();
 			dirs.add(new File(resource.getFile()));
 		}
-		ArrayList<File> files = new ArrayList<File>();
-		for (File directory : dirs) {
-			files.addAll(findFiles(directory, extesions));
+		List<File> files = new ArrayList<File>();
+		for (File file : dirs) {
+			if (file.isDirectory()) {
+				files.addAll(findFiles(file, extesions));
+			} else {
+				files.add(file);
+			}
 		}
 		return files;
 	}
 
-	public static ArrayList<File> getResources(String path, String... extesions) throws IOException {
+	public static List<File> getResources(String path, String... extesions) throws IOException {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		return getResources(classLoader, path, extesions);
 	}
-	
-	public static URL getResource(String path){
+
+	public static URL getResource(String path) {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		if(!META_INF.contains(path)){
-			path=META_INF+"/"+path;
-		}
 		return classLoader.getResource(path);
 	}
 
@@ -125,8 +125,8 @@ public class ResourcesUtil {
 	}
 
 	/**
-	 * Scans all classes accessible from the context class loader which belong
-	 * to the given package and subpackages.
+	 * Scans all classes accessible from the context class loader which belong to
+	 * the given package and subpackages.
 	 *
 	 * @param packageName
 	 *            The base package
@@ -152,8 +152,7 @@ public class ResourcesUtil {
 	}
 
 	/**
-	 * Recursive method used to find all classes in a given directory and
-	 * subdirs.
+	 * Recursive method used to find all classes in a given directory and subdirs.
 	 *
 	 * @param directory
 	 *            The base directory
@@ -174,22 +173,22 @@ public class ResourcesUtil {
 				classes.addAll(findClasses(file, packageName + "." + file.getName()));
 			} else if (file.getName().endsWith(".class")) {
 				String cls = packageName + '.' + file.getName().substring(0, file.getName().length() - 6);
-				Class<?> _cls=null;
+				Class<?> _cls = null;
 				try {
-					_cls=Class.forName(cls);
-				} catch (ClassNotFoundException |NoClassDefFoundError | ExceptionInInitializerError e) {
+					_cls = Class.forName(cls);
+				} catch (ClassNotFoundException | NoClassDefFoundError | ExceptionInInitializerError e) {
 					// my class isn't there!
 				}
-				if(_cls!=null)
-				classes.add(_cls);
+				if (_cls != null)
+					classes.add(_cls);
 			}
 		}
 		return classes;
 	}
 
 	/**
-	 * Scans all classes accessible from the context class loader which belong
-	 * to the given package and subpackages.
+	 * Scans all classes accessible from the context class loader which belong to
+	 * the given package and subpackages.
 	 *
 	 * @param packageName
 	 *            The base package
@@ -218,15 +217,15 @@ public class ResourcesUtil {
 				}
 			}
 		}
-		
+
 		return classes.toArray(new Class[classes.size()]);
 	}
+
 	public static Class<?>[] getClasses() {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		return getClasses(classLoader);
 	}
-	
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static ArrayList loadFilesFromJarOrDirectly(String dirPath, URL dirUrl) {
 		ArrayList inputStreamArray = new ArrayList();
@@ -273,8 +272,7 @@ public class ResourcesUtil {
 		for (String path : dirs) {
 			File file = new File(PathUtil.locateURIConfig(path));
 			if (!DirUtil.createFolder(file)) {
-				LogTracker.info(ResourcesLoader_dirCreate, LogAccess.DEVELOPER,
-						"create new dir for meta data:" + path);
+				LogTracker.info(ResourcesLoader_dirCreate, LogAccess.DEVELOPER, "create new dir for meta data:" + path);
 			}
 		}
 		return true;
@@ -296,7 +294,7 @@ public class ResourcesUtil {
 					}
 					if (!json.isEmpty()) {
 						List<Object> list = JSONUtil.getListFromJSONArray(json);
-						if (ValidationUtil.isValidObject(list)){
+						if (ValidationUtil.isValidObject(list)) {
 							loadtable.addAll(list);
 						}
 					}

@@ -55,7 +55,6 @@ public class BuilderUtil {
 		return (T) current;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static  Class<?> getProperty(Class<?> _class, String _field) {
 		Field field=FieldUtil.getField(_class, _field, Access.PRIVATE);
 		if(field==null) {
