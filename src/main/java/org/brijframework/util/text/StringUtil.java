@@ -8,6 +8,7 @@ import javax.swing.text.MaskFormatter;
 
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
+import org.brijframework.util.validator.ValidationUtil;
 
 public class StringUtil {
 
@@ -33,6 +34,20 @@ public class StringUtil {
 	public static boolean hasText(Object _text) {
 		Assertion.notNull(_text, AssertMessage.arg_null_message);
 		return _text instanceof String || _text instanceof Character;
+	}
+	
+	/**
+	 * check its null or empty char values
+	 * 
+	 * @param _text
+	 * @return boolean
+	 */
+	public static boolean isEmpty(final Object _text) {
+		if (_text == null) {
+			return true;
+		}
+		final String s = _text.toString().trim();
+		return s.length() == 0;
 	}
 
 	/**

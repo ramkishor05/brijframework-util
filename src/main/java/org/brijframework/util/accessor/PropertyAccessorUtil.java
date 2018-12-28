@@ -100,7 +100,7 @@ public class PropertyAccessorUtil{
 	@SuppressWarnings("unchecked")
 	public static <T> T getProperty(Object bean,Method colling, Access access) {
 		Assertion.notNull(colling, AssertMessage.field_object_null_message );
-		Assertion.isTrue(!access.isAccess(colling.getModifiers()), AssertMessage.unauth_access_message + " " + colling.getName());
+		Assertion.isTrue(!access.isAccess(colling.getModifiers()), AssertMessage.ILLEgGAL_ACCESS_MSG + " " + colling.getName());
 		try {
 			colling.setAccessible(true);
 			return (T) colling.invoke(bean);
@@ -114,7 +114,7 @@ public class PropertyAccessorUtil{
 	@SuppressWarnings("unchecked")
 	public static <T> T getProperty(Object bean,Field colling, Access access) {
 		Assertion.notNull(colling, AssertMessage.field_object_null_message );
-		Assertion.isTrue(!access.isAccess(colling.getModifiers()), AssertMessage.unauth_access_message + " " + colling.getName());
+		Assertion.isTrue(!access.isAccess(colling.getModifiers()), AssertMessage.ILLEgGAL_ACCESS_MSG + " " + colling.getName());
 		try {
 			colling.setAccessible(true);
 			return (T) colling.get(bean);

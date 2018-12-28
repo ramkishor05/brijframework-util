@@ -6,6 +6,7 @@ public final class AssertMessage {
 	public final static String arg_null_message = "this arg is required; it must not be null";
 	public final static String field_object_null_message = "this field is required; it must not be null";
 	public final static String field_name_null_message = "this field name is required; it must not be null";
+	public final static String field_value_null_message = "Value is required; it must not be blank";
 	public final static String class_name_null_message = "this class name is required; it must not be null";
 	public final static String arg_object_null_message = "this arg is required; it must not be null";
 	public final static String method_name_null_message = "this method name is required; it must not be null";
@@ -21,7 +22,7 @@ public final class AssertMessage {
 	public static final String allready_contains = "Key allready conatains . don't try to modify with key values";
 	public static final String key_not_contains = "Key not conatains . don't try to modify with key values";
 	public static final String group_not_found_message = "Key not found . don't try to find with key values";
-	public static final String unauth_access_message = "Don't try to unauth access";
+	public static final String ILLEgGAL_ACCESS_MSG = "Trying to illegal access";
 	public static final String Invalid_file_format = "Invalid file format";
 	public static final String model_object_null_message = "Model object is required; it must not be null";
 
