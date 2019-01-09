@@ -15,7 +15,6 @@ org\brijframework\util\casting\TimeUtil.class
 org\brijframework\util\location\StreamUtil$NonClosingInputStream.class
 org\brijframework\util\casting\DateUtil.class
 org\brijframework\util\resouces\JSONUtil.class
-org\brijframework\util\builder\BuilderUtil.class
 org\brijframework\util\runtime\RuntimeUtil.class
 org\brijframework\util\accessor\LogicAccessorUtil.class
 org\brijframework\util\reflect\MethodUtil.class
