@@ -20,9 +20,17 @@ import org.brijframework.util.validator.ValidationUtil;
 public abstract class ClassUtil {
 
 	public ClassUtil() {
-		// TODO Auto-generated constructor stub
 	}
 
+	public static boolean isClass(String className) {
+	    try  {
+	        Class.forName(className);
+	        return true;
+	    }  catch (ClassNotFoundException e) {
+	        return false;
+	    }
+	}
+	
 	/**
 	 * get class from class name
 	 * 
