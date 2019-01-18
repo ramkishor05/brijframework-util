@@ -23,10 +23,14 @@ public class PrintUtil {
 			if(value==null) {
 				builder.append(field.getName()+"= null");
 			}else {
-				if(!ValidationUtil.isJDKClass(value)) {
-					builder.append(field.getName()+"="+getObjectInfo(object,value));
-				} else if(value instanceof Map){
+				if(object.getClass().getName().equals(value.getClass().getName())) {
+					builder.append(field.getName()+"="+value.getClass().getSimpleName()+"#"+value.hashCode());
+				}else if(value instanceof Map){
 					builder.append(field.getName()+"="+getMapInfo(object, (Map<String,Object>)value));
+				} else if(value instanceof Collection){
+					builder.append(field.getName()+"="+getListInfo(object, (Collection<Object>)value));
+				}else if(!ValidationUtil.isJDKClass(value)) {
+					builder.append(field.getName()+"="+getObjectInfo(object,value));
 				}else {
 					builder.append(field.getName()+"="+value);
 				}
@@ -54,9 +58,9 @@ public class PrintUtil {
 				if(parent.getClass().getName().equals(value.getClass().getName())) {
 					builder.append(field.getName()+"="+value.getClass().getSimpleName()+"#"+value.hashCode());
 				}else if(value instanceof Map){
-					builder.append(field+"="+getMapInfo(parent, (Map<String,Object>)value));
+					builder.append(field.getName()+"="+getMapInfo(parent, (Map<String,Object>)value));
 				} else if(value instanceof Collection){
-					builder.append(field+"="+getListInfo(parent, (Collection<Object>)value));
+					builder.append(field.getName()+"="+getListInfo(parent, (Collection<Object>)value));
 				}else if(!ValidationUtil.isJDKClass(value)) {
 					builder.append(field.getName()+"="+getObjectInfo(object,value));
 				}else {
@@ -109,8 +113,15 @@ public class PrintUtil {
 			if(value==null) {
 				builder.append(value);
 			}else {
-				if(!ValidationUtil.isJDKClass(value)) {
-					builder.append(getObjectInfo(value));
+				if(parent.getClass().getName().equals(value.getClass().getName())) {
+					builder.append(value.getClass().getSimpleName()+"#"+value.hashCode());
+				}else 
+				if(value instanceof Map){
+					builder.append(getMapInfo(parent, (Map<String,Object>)value));
+				}else if(value instanceof Collection){
+					builder.append(getListInfo(parent, (Collection<Object>)value));
+				}else if(!ValidationUtil.isJDKClass(value)) {
+					builder.append(getObjectInfo(parent, value));
 				} else {
 					builder.append(value);
 				}
