@@ -40,7 +40,7 @@ public abstract class ClassUtil {
 	public static Class<?> getClass(String _className) {
 		Assertion.notNull(_className, AssertMessage.class_name_null_message);
 		try {
-			return ClassLoader.getSystemClassLoader().loadClass(_className);
+			return Class.forName(_className);
 		} catch (ClassNotFoundException e) {
 			LogTracker.trace("ClassUtil_getClass", LogAccess.DEVELOPER, e.getMessage(), e);
 		}
