@@ -105,6 +105,7 @@ public class PrintUtil {
 		return builder.toString();
 	}
 	
+	@SuppressWarnings("unchecked")
 	private static String getListInfo(Object parent, Collection<Object> list) {
 		StringBuilder builder=new StringBuilder(list.getClass().getSimpleName());
 		builder.append("(");

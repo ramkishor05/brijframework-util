@@ -9,20 +9,7 @@ import org.brijframework.support.enums.Access;
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
 
-public class ConstructUtil {
-
-	public ConstructUtil() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	public ConstructUtil(int i) {
-		// TODO Auto-generated constructor stub
-	}
-	
-	public ConstructUtil(String st,int i) {
-		// TODO Auto-generated constructor stub
-	}
-
+public abstract class ConstructUtil {
 
 	public static List<Constructor<?>> getConstructors(Class<?> _class) {
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);

@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import org.brijframework.util.reflect.PackUtil;
+import org.brijframework.util.reflect.ReflectionUtils;
 
 
 public abstract class ValidationUtil {
@@ -744,14 +744,14 @@ public abstract class ValidationUtil {
 		if(object ==null||object =="null") {
 			return false;
 		}
-		return PackUtil.isProjectClass(object.getClass());
+		return ReflectionUtils.isProjectClass(object.getClass());
 	}
 	
 	public static boolean isJarClass(Object object) {
 		if(object ==null||object =="null") {
 			return false;
 		}
-		return PackUtil.isJarClass(object.getClass());
+		return ReflectionUtils.isJarClass(object.getClass());
 	}
 	
 	public static void main(String[] args) {
