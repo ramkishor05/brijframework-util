@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
@@ -23,21 +24,22 @@ public abstract class ReflectionUtils {
 	public static final String INTERNAL_CLASS="INTERNAL_CLASS";
 	public static final String EXTERNAL_CLASS="EXTERNAL_CLASS";
 	private static ConcurrentHashMap<String, List<Class<?>>> cache=new ConcurrentHashMap<>();
+	private static boolean isExternalFilesLoaded=false;
+	private static boolean isInternalFilesLoaded=false;
+	
 	public static ConcurrentHashMap<String, List<Class<?>>> getCache() {
 		return cache;
 	}
+	
 	static {
-		try {
-			getClassListFromExternal().forEach(cls->{
-				if(getCache().get(EXTERNAL_CLASS)==null) {
-					getCache().put(EXTERNAL_CLASS,new ArrayList<>());
-				}
-				getCache().get(EXTERNAL_CLASS).add(cls);
-			});
-		} catch (Exception e) {
-			e.printStackTrace();
+		loadInternalFiles();
+	}
+	
+	public static void loadInternalFiles() {
+		if(isInternalFilesLoaded) {
+			return;
 		}
-		
+		isInternalFilesLoaded=true;
 		try {
 			getClassListFromInternal().forEach(cls->{
 				if(getCache().get(INTERNAL_CLASS)==null) {
@@ -49,11 +51,28 @@ public abstract class ReflectionUtils {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void loadExternalFiles() {
+		if(isExternalFilesLoaded) {
+			return;
+		}
+		isExternalFilesLoaded=true;
+		try {
+			getClassListFromExternal().forEach(cls->{
+				if(getCache().get(EXTERNAL_CLASS)==null) {
+					getCache().put(EXTERNAL_CLASS,new ArrayList<>());
+				}
+				getCache().get(EXTERNAL_CLASS).add(cls);
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
 
 	public static ClassLoader getContextClassLoader() {
 		return Thread.currentThread().getContextClassLoader();
 	}
-
 
 	public static List<String> getJarPaths() {
 		URL[] urls = ((URLClassLoader) getContextClassLoader()).getURLs();
@@ -69,6 +88,15 @@ public abstract class ReflectionUtils {
 		List<File> jars = new ArrayList<>();
 		for (URL url : urls) {
 			jars.add(new File(url.getFile()));
+		}
+		return jars;
+	}
+	
+	public static List<File> getJarFiles(Consumer<File> action) {
+		URL[] urls = ((URLClassLoader) getContextClassLoader()).getURLs();
+		List<File> jars = new ArrayList<>();
+		for (URL url : urls) {
+			action.accept(new File(url.getFile()));
 		}
 		return jars;
 	}
@@ -208,19 +236,20 @@ public abstract class ReflectionUtils {
 	}
 	
 	public static boolean isJarClass(Class<?> clas) {
-		return cache.get(INTERNAL_CLASS).stream().anyMatch(cls->cls.getName().equals(clas.getName()));
+		loadExternalFiles();
+		return getCache().get(EXTERNAL_CLASS).stream().anyMatch(cls->cls.getName().equals(clas.getName()));
 	}
 
 	public static boolean isProjectClass(Class<?> clas) {
-		return cache.get(EXTERNAL_CLASS).stream().anyMatch(cls->cls.getName().equals(clas.getName()));
+		return getCache().get(INTERNAL_CLASS).stream().anyMatch(cls->cls.getName().equals(clas.getName()));
 	}
 	
-	public static List<String> getNameListFromExternal(String jarName) throws Exception {
+	public static void getNameListFromExternal(File jarFile,Consumer<String> action) throws Exception {
 		List<String> classes = new ArrayList<>();
-		if (!jarName.endsWith(JAR_FILE_SUFFIX)) {
-			return classes;
+		if (!jarFile.isDirectory() && !jarFile.toString().endsWith(JAR_FILE_SUFFIX)) {
+			return ;
 		}
-		try (JarInputStream jar = new JarInputStream(new FileInputStream(jarName))) {
+		try (JarInputStream jar = new JarInputStream(new FileInputStream(jarFile))) {
 			JarEntry entry;
 			while (true) {
 				entry = jar.getNextJarEntry();
@@ -231,21 +260,21 @@ public abstract class ReflectionUtils {
 					String className = entry.getName().replace(DIR_STR_SEPARATOR, DOT_STR_SEPARATOR);
 					className=className.substring(0, className.lastIndexOf(DOT_CHAR_SEPARATOR));
 					classes.add(className);
+					action.accept(className);
 				}
 			}
 		}
-		return classes;
 	}
 	
 	public static List<String> getNameListFromExternal() throws Exception {
 		List<String> classes = new ArrayList<>();
-		getJarFiles().forEach(root -> {
-			if (!root.isDirectory()) {
-				try {
-					classes.addAll(getNameListFromExternal(root.toString()));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		getJarFiles(root -> {
+			try {
+				getNameListFromExternal(root,className->{
+					classes.add(className);
+				});
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 		return classes;
