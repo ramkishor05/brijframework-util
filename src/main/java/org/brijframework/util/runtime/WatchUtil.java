@@ -5,11 +5,13 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
@@ -58,6 +60,37 @@ public class WatchUtil {
 			
 		} catch (IOException ex) {
 			System.err.println(ex);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static void watchFile(File file) throws IOException {
+		WatchService watcher = FileSystems.getDefault().newWatchService();
+		Path dir = Paths.get(file.getParent());
+		dir.register(watcher, ENTRY_MODIFY,OVERFLOW);
+		
+		System.out.println("Watch Service registered for dir: " + dir.getFileName());
+		
+		while (true) {
+			WatchKey key;
+			try {
+				key = watcher.take();
+			} catch (InterruptedException ex) {
+				return;
+			}
+			for (WatchEvent<?> event : key.pollEvents()) {
+				WatchEvent.Kind<?> kind = event.kind();
+				WatchEvent<Path> ev = (WatchEvent<Path>) event;
+				Path fileName = ev.context();
+				LogTracker.info("WatchUtil",LogAccess.DEVELOPER, kind.name().toLowerCase() + ": " + fileName);
+				if (kind == ENTRY_MODIFY ) {
+					System.out.println("My source file has changed!!!");
+				}
+			}
+			boolean valid = key.reset();
+			if (!valid) {
+				break;
+			}
 		}
 	}
 }

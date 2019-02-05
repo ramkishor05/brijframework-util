@@ -8,7 +8,6 @@ import javax.swing.text.MaskFormatter;
 
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
-import org.brijframework.util.validator.ValidationUtil;
 
 public class StringUtil {
 
