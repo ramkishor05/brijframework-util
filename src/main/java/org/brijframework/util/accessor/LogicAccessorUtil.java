@@ -14,7 +14,7 @@ public class LogicAccessorUtil{
 	}
 	
 	public static Object callLogic(Object bean,String method, Access access,Object... paramObjects) {
-		Method collMethod = MetaAccessorUtil.getLogicMeta(bean.getClass(),method, access);
+		Method collMethod = MetaAccessorUtil.getLogicMeta(bean.getClass(),method, access,paramObjects);
 		return callLogic(bean,collMethod, paramObjects);
 	}
 	

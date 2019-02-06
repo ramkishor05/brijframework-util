@@ -25,6 +25,26 @@ public abstract class DirUtil {
 	static List<File> folderList = new ArrayList<>();
 	static List<File> filelist = new ArrayList<>();
 	
+	public static List<File> getSubDirs(File file) {
+		List<File>subDirs=new ArrayList<>();
+		if(file.isDirectory()) {
+			for(File sub:file.listFiles()) {
+				getSubDirs(subDirs,sub);
+			}
+		}
+		return subDirs;
+	}
+	
+	public static List<File> getSubDirs(List<File>subDirs,File file) {
+		if(file.isDirectory()) {
+			subDirs.add(file);
+			for(File sub:file.listFiles()) {
+				getSubDirs(subDirs,sub);
+			}
+		}
+		return subDirs;
+	}
+	
 	public static boolean ensureDirExists(File dir) {
 		if (!dir.exists()) {
 			boolean dirCreatedSuccessfully = dir.mkdirs();

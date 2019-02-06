@@ -1,45 +1,39 @@
 package org.brijframework.util;
 
 import java.io.File;
-import java.lang.reflect.Method;
-import java.net.URI;
+import java.util.LinkedHashMap;
 
 public class WatchConfig {
 
-	private volatile File file;
-	private boolean isReload;
-	private Method method;
+	private volatile File dir;
+	
+	private String method;
 	private Object object;
 	private Object[] parameters;
+	
+	private volatile LinkedHashMap<String, File> subDirs=new LinkedHashMap<>();
 
-	public File getFile() {
-		return file;
+	public void setSubDirs(LinkedHashMap<String, File> subDirs) {
+		this.subDirs = subDirs;
+	}
+	
+	public LinkedHashMap<String, File> getSubDirs() {
+		return subDirs;
+	}
+	
+	public File getDir() {
+		return dir;
 	}
 
-	public void setFile(File file) {
-		this.file = file;
+	public void setDir(File dir) {
+		this.dir = dir;
 	}
 
-	public boolean isReload() {
-		return isReload;
-	}
-
-	public void setReload(boolean isReload) {
-		this.isReload = isReload;
-	}
-
-	public URI getDir() {
-		if(getFile().isDirectory()) {
-			return getFile().toURI();
-		}
-		return getFile().getParentFile().toURI();
-	}
-
-	public Method getMethod() {
+	public String getMethod() {
 		return method;
 	}
 
-	public void setMethod(Method method) {
+	public void setMethod(String method) {
 		this.method = method;
 	}
 
