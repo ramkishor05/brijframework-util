@@ -3,6 +3,8 @@ package org.brijframework.util;
 import java.io.File;
 import java.util.LinkedHashMap;
 
+import org.brijframework.util.accessor.LogicAccessorUtil;
+
 public class WatchConfig {
 
 	private volatile File dir;
@@ -52,4 +54,14 @@ public class WatchConfig {
 	public void setParameters(Object... parameters) {
 		this.parameters = parameters;
 	}
+	
+
+	public void recall(File path) {
+		try {
+			LogicAccessorUtil.callLogic(this.getObject(), this.getMethod(), path);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
 }

@@ -11,14 +11,11 @@ import java.nio.file.Paths;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.brijframework.logger.LogTracker;
 import org.brijframework.logger.constant.LogAccess;
-import org.brijframework.util.accessor.LogicAccessorUtil;
 
 public class WatchRunable implements Runnable{
 
@@ -69,7 +66,7 @@ public class WatchRunable implements Runnable{
 							updated.put(ctPath.getAbsolutePath(),ctPath.lastModified());
 						}
 						LogTracker.info("WatchRunable ",LogAccess.DEVELOPER, "Resource file has changed!!!" + ": " + ctPath+" lastModified at -> "+ctPath.lastModified());
-						recall(config,ctPath);
+						config.recall(ctPath);
 					}
 				}
 				pollEvents.clear();
@@ -82,13 +79,4 @@ public class WatchRunable implements Runnable{
 				return;
 			}
 	}
-
-	private void recall(WatchConfig config,File path) {
-		if(config==null) {
-			return;
-		}
-		LogicAccessorUtil.callLogic(config.getObject(), config.getMethod(), path);
-	}
-	
-	
 }

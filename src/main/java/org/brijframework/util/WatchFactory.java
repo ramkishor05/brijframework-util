@@ -2,6 +2,8 @@ package org.brijframework.util;
 
 import java.io.File;
 import java.util.LinkedHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.brijframework.util.location.DirUtil;
 
@@ -35,8 +37,8 @@ public class WatchFactory {
 	
 	private void doService(WatchConfig config) {
 		try {
-			Thread thread=new Thread(new WatchRunable(config));
-			thread.start();
+			ExecutorService executor = Executors.newSingleThreadExecutor();
+			executor.submit(new WatchRunable(config));
 		}catch (Exception e) {
 		}
 	}
