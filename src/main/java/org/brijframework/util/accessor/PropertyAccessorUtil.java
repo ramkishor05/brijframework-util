@@ -176,4 +176,11 @@ public class PropertyAccessorUtil{
 		return properties;
 	}
 
+	public static void setSafeProperty(Object bean, String field, Object value) {
+		AccessibleObject colling = MetaAccessorUtil.setPropertyMeta(bean.getClass(), field, Access.PRIVATE, value);
+		if(colling!=null) {
+			setProperty(bean, colling, value);
+		}
+	}
+
 }

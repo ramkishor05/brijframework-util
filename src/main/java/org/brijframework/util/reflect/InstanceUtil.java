@@ -5,6 +5,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
+import org.brijframework.util.accessor.PropertyAccessorUtil;
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
 
@@ -109,7 +110,7 @@ public abstract class InstanceUtil {
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);
 		Assertion.notNull(_map, AssertMessage.arg_object_null_message);
 		Object object = getInstance(_class);
-		LogicUnit.setAllField(object, _map);
+		PropertyAccessorUtil.setProperties(object, _map);
 		return (T) object;
 	}
 	
@@ -127,7 +128,7 @@ public abstract class InstanceUtil {
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);
 		Assertion.notNull(_map, AssertMessage.arg_object_null_message);
 		Object object = getInstance(_class,params);
-		LogicUnit.setAllField(object, _map);
+		PropertyAccessorUtil.setProperties(object, _map);
 		return (T) object;
 	}
 
@@ -174,7 +175,7 @@ public abstract class InstanceUtil {
 		Assertion.notNull(_class, AssertMessage.class_name_null_message);
 		Assertion.notNull(_map, AssertMessage.arg_object_null_message);
 		Object object = getSingletonInstance(_class, _params);
-		LogicUnit.setAllField(object, _map);
+		PropertyAccessorUtil.setProperties(object, _map);
 		return (T) object;
 	}
 	
