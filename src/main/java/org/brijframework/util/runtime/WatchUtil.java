@@ -11,14 +11,12 @@ import java.net.URI;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 
 import org.brijframework.logger.LogTracker;
 import org.brijframework.logger.constant.LogAccess;
-
 
 public class WatchUtil {
 	public static void watchService(URI paths) {
