@@ -76,6 +76,7 @@ public class PropertyAccessorUtil{
 	}
 
 	public static <T> T getProperty(Object bean, String field, Access level) {
+		Assertion.notNull(bean, AssertMessage.model_object_null_message);
 		Assertion.notNull(field, AssertMessage.field_name_null_message);
 		AccessibleObject colling = MetaAccessorUtil.getPropertyMeta(bean.getClass(), field, Access.PRIVATE);
 		Assertion.notNull(colling, AssertMessage.unbounded_key_message + " " + field);

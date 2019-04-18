@@ -5,9 +5,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.jar.JarEntry;
@@ -23,11 +25,11 @@ public abstract class ReflectionUtils {
 	private static final String ST_DOT="\\.";
 	public static final String INTERNAL_CLASS="INTERNAL_CLASS";
 	public static final String EXTERNAL_CLASS="EXTERNAL_CLASS";
-	private static ConcurrentHashMap<String, List<Class<?>>> cache=new ConcurrentHashMap<>();
-	private static boolean isExternalFilesLoaded=false;
-	private static boolean isInternalFilesLoaded=false;
+	private static ConcurrentHashMap<String, Set<Class<?>>> cache=new ConcurrentHashMap<>();
+	private static volatile boolean isExternalFilesLoaded=false;
+	private static volatile boolean isInternalFilesLoaded=false;
 	
-	public static ConcurrentHashMap<String, List<Class<?>>> getCache() {
+	public static ConcurrentHashMap<String, Set<Class<?>>> getCache() {
 		return cache;
 	}
 	
@@ -43,7 +45,7 @@ public abstract class ReflectionUtils {
 		try {
 			getClassListFromInternal().forEach(cls->{
 				if(getCache().get(INTERNAL_CLASS)==null) {
-					getCache().put(INTERNAL_CLASS,new ArrayList<>());
+					getCache().put(INTERNAL_CLASS,new HashSet<>());
 				}
 				getCache().get(INTERNAL_CLASS).add(cls);
 			});
@@ -60,7 +62,7 @@ public abstract class ReflectionUtils {
 		try {
 			getClassListFromExternal().forEach(cls->{
 				if(getCache().get(EXTERNAL_CLASS)==null) {
-					getCache().put(EXTERNAL_CLASS,new ArrayList<>());
+					getCache().put(EXTERNAL_CLASS,new HashSet<>());
 				}
 				getCache().get(EXTERNAL_CLASS).add(cls);
 			});
@@ -69,41 +71,51 @@ public abstract class ReflectionUtils {
 		}
 
 	}
+	
+	public static Set<Class<?>> getInternalClassList(){
+		loadInternalFiles();
+		return getCache().get(INTERNAL_CLASS);
+	}
+	
+	public static Set<Class<?>> getExternalClassList(){
+		loadExternalFiles();
+		return getCache().get(EXTERNAL_CLASS);
+	}
 
 	public static ClassLoader getContextClassLoader() {
 		return Thread.currentThread().getContextClassLoader();
 	}
 
-	public static List<String> getJarPaths() {
+	public static Set<String> getJarPaths() {
 		URL[] urls = ((URLClassLoader) getContextClassLoader()).getURLs();
-		List<String> jars = new ArrayList<>();
+		Set<String> jars = new HashSet<>();
 		for (URL url : urls) {
 			jars.add(url.getFile());
 		}
 		return jars;
 	}
 
-	public static List<File> getJarFiles() {
+	public static Set<File> getJarFiles() {
 		URL[] urls = ((URLClassLoader) getContextClassLoader()).getURLs();
-		List<File> jars = new ArrayList<>();
+		Set<File> jars = new HashSet<>();
 		for (URL url : urls) {
 			jars.add(new File(url.getFile()));
 		}
 		return jars;
 	}
 	
-	public static List<File> getJarFiles(Consumer<File> action) {
+	public static Set<File> getJarFiles(Consumer<File> action) {
 		URL[] urls = ((URLClassLoader) getContextClassLoader()).getURLs();
-		List<File> jars = new ArrayList<>();
+		Set<File> jars = new HashSet<>();
 		for (URL url : urls) {
 			action.accept(new File(url.getFile()));
 		}
 		return jars;
 	}
 
-	public static List<String> getResourcePaths() throws IOException {
+	public static Set<String> getResourcePaths() throws IOException {
 		Enumeration<URL> urls = getContextClassLoader().getResources("");
-		List<String> jars = new ArrayList<>();
+		Set<String> jars = new HashSet<>();
 		while (urls.hasMoreElements()) {
 			URL url = (URL) urls.nextElement();
 			jars.add(url.getFile());
@@ -111,9 +123,9 @@ public abstract class ReflectionUtils {
 		return jars;
 	}
 
-	public static List<File> getResourceFiles() throws IOException {
+	public static Set<File> getResourceFiles() throws IOException {
 		Enumeration<URL> urls = getContextClassLoader().getResources("");
-		List<File> jars = new ArrayList<>();
+		Set<File> jars = new HashSet<>();
 		while (urls.hasMoreElements()) {
 			URL url = (URL) urls.nextElement();
 			jars.add(new File(url.getFile()));
@@ -121,9 +133,9 @@ public abstract class ReflectionUtils {
 		return jars;
 	}
 
-	public static List<URL> getResourceURLs() throws IOException {
+	public static Set<URL> getResourceURLs() throws IOException {
 		Enumeration<URL> urls = getContextClassLoader().getResources("");
-		List<URL> jars = new ArrayList<>();
+		Set<URL> jars = new HashSet<>();
 		while (urls.hasMoreElements()) {
 			URL url = (URL) urls.nextElement();
 			jars.add(url);
@@ -132,8 +144,8 @@ public abstract class ReflectionUtils {
 	}
 
 
-	public static List<Class<?>> getClassListFromInternal() {
-		List<Class<?>> classes = new ArrayList<>();
+	public static Set<Class<?>> getClassListFromInternal() {
+		Set<Class<?>> classes = new HashSet<>();
 		try {
 			getNameListFromInternal().forEach(className -> {
 				Class<?> cls=getSafeClass(className);
@@ -147,8 +159,8 @@ public abstract class ReflectionUtils {
 		return classes;
 	}
 	
-	public static List<String> getNameListFromInternal() throws Exception {
-		List<String> classes = new ArrayList<String>();
+	public static Set<String> getNameListFromInternal() throws Exception {
+		Set<String> classes = new HashSet<>();
 		getResourceFiles().forEach(root -> {
 			if (null != root.listFiles())
 				for (File file : root.listFiles()) {
@@ -174,7 +186,7 @@ public abstract class ReflectionUtils {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public static List<String> getNameListForInternal(String packageName) throws Exception {
+	public static Set<String> getNameListForInternal(String packageName) throws Exception {
 		ClassLoader classLoader = getContextClassLoader();
 		return getNameListForInternal(packageName, classLoader);
 	}
@@ -188,15 +200,15 @@ public abstract class ReflectionUtils {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public static List<String> getNameListForInternal(String packageName,ClassLoader classLoader) throws Exception {
+	public static Set<String> getNameListForInternal(String packageName,ClassLoader classLoader) throws Exception {
 		String path = packageName.replace(DOT_STR_SEPARATOR, DIR_STR_SEPARATOR);
 		Enumeration<URL> resources = classLoader.getResources(path);
-		List<File> dirs = new ArrayList<File>();
+		Set<File> dirs = new HashSet<File>();
 		while (resources.hasMoreElements()) {
 			URL resource = resources.nextElement();
 			dirs.add(new File(resource.getFile()));
 		}
-		List<String> classes = new ArrayList<>();
+		Set<String> classes = new HashSet<>();
 		for (File directory : dirs) {
 			classes.addAll(getNameListForInternal(directory, packageName));
 		}
@@ -212,8 +224,8 @@ public abstract class ReflectionUtils {
 	 * @return The classes
 	 * @throws ClassNotFoundException
 	 */
-	private static List<String> getNameListForInternal(File directory, String packageName) throws Exception {
-		List<String> classes = new ArrayList<>();
+	private static Set<String> getNameListForInternal(File directory, String packageName) throws Exception {
+		Set<String> classes = new HashSet<>();
 		if (!directory.exists()) {
 			return classes;
 		}
@@ -224,8 +236,8 @@ public abstract class ReflectionUtils {
 		return classes;
 	}
 	
-	private static List<String> getNameListForInternalClass(File file, String packageName) throws Exception {
-		List<String> classes = new ArrayList<>();
+	private static Set<String> getNameListForInternalClass(File file, String packageName) throws Exception {
+		Set<String> classes = new HashSet<>();
 		if (file.isDirectory()) {
 			assert !file.getName().contains(ST_DOT);
 			classes.addAll(getNameListForInternal(file, packageName + DOT_STR_SEPARATOR + file.getName()));
@@ -245,7 +257,7 @@ public abstract class ReflectionUtils {
 	}
 	
 	public static void getNameListFromExternal(File jarFile,Consumer<String> action) throws Exception {
-		List<String> classes = new ArrayList<>();
+		Set<String> classes = new HashSet<>();
 		if (!jarFile.isDirectory() && !jarFile.toString().endsWith(JAR_FILE_SUFFIX)) {
 			return ;
 		}
@@ -266,8 +278,8 @@ public abstract class ReflectionUtils {
 		}
 	}
 	
-	public static List<String> getNameListFromExternal() throws Exception {
-		List<String> classes = new ArrayList<>();
+	public static Set<String> getNameListFromExternal() throws Exception {
+		Set<String> classes = new HashSet<>();
 		getJarFiles(root -> {
 			try {
 				getNameListFromExternal(root,className->{
@@ -280,8 +292,8 @@ public abstract class ReflectionUtils {
 		return classes;
 	}
 	
-	public static List<Class<?>> getClassListFromExternal() throws Exception {
-		List<Class<?>> classes = new ArrayList<>();
+	public static Set<Class<?>> getClassListFromExternal() throws Exception {
+		Set<Class<?>> classes = new HashSet<>();
 		getNameListFromExternal().forEach(className -> {
 			Class<?> cls=getSafeClass(className);
 			if(cls!=null) {

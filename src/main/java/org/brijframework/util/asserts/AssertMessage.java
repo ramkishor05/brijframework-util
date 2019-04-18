@@ -12,7 +12,7 @@ public final class AssertMessage {
 	public final static String method_name_null_message = "this method name is required; it must not be null";
 	public final static String method_object_null_message = "this method is required; it must not be null";
 	public final static String object_null_message = "this object is required; it must not be null";
-	public final static String root_object_null_message = "root object is required; it must not be null";
+	public final static String root_object_null_message = "Model object is required; it must not be null";
 	public final static String properties_null_message = "properties is required; it must not be null";
 	public final static String property_null_message = "property is required; it must not be null";
 	public static final String unbounded_key_message = "passing argument with unbounded key";

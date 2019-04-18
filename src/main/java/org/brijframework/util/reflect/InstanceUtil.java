@@ -3,6 +3,7 @@ package org.brijframework.util.reflect;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.Map;
 
 import org.brijframework.util.accessor.PropertyAccessorUtil;
@@ -80,6 +81,9 @@ public abstract class InstanceUtil {
 	@SuppressWarnings("unchecked")
 	public static <T> T getInstance(Class<T> _class, Object... params) {
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);
+		if(_class.isInterface()||_class.getModifiers()==Modifier.ABSTRACT) {
+			return null;
+		}
 		try {
 			if (params!=null && params.length > 0){
 				Constructor<?> constructor = constructor(_class,params);
