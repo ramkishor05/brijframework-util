@@ -1,6 +1,6 @@
 package org.brijframework.util.meta;
 
-import org.brijframework.support.constants.Constants;
+import org.brijframework.util.support.Constants;
 
 public class PointUtil {
 	

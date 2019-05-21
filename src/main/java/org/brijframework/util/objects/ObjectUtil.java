@@ -27,10 +27,6 @@ import java.util.Map.Entry;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.brijframework.logger.LogTracker;
-import org.brijframework.logger.constant.LogAccess;
-import org.brijframework.logger.constant.LogLevel;
-import org.brijframework.support.constants.Constants;
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
 import org.brijframework.util.casting.CastingUtil;
@@ -39,6 +35,7 @@ import org.brijframework.util.reflect.FieldUtil;
 import org.brijframework.util.reflect.InstanceUtil;
 import org.brijframework.util.reflect.LogicUnit;
 import org.brijframework.util.resouces.FileUtil;
+import org.brijframework.util.support.Constants;
 import org.brijframework.util.text.StringUtil;
 
 public abstract class ObjectUtil {
@@ -1157,8 +1154,6 @@ public abstract class ObjectUtil {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Collection getValuesFormCollection(Collection<?> list, String property) {
 		if (property == null) {
-			String info = "InstanceUtil_getValueListFormList |  property name is null";
-			LogTracker.info("InstanceUtil_getValueListFormList", LogAccess.DEVELOPER, list, new NullPointerException(), info);
 			return null;
 		}
 		Collection<Object> values = (Collection<Object>) InstanceUtil.getInstance(list.getClass());
@@ -1178,8 +1173,6 @@ public abstract class ObjectUtil {
 	 */
 	public Map<?, ?> getMultiValuesFormCollection(Collection<?> list, String property) {
 		if (property == null) {
-			String info = "InstanceUtil_getMultiValuesFormList | property name is null";
-			LogTracker.info("InstanceUtil_getMultiValuesFormList", LogAccess.DEVELOPER, list, new NullPointerException(), info);
 			return null;
 		}
 		Map<String, Object> objMap = new HashMap<>();
@@ -1389,7 +1382,7 @@ public abstract class ObjectUtil {
 			}
 			return x;
 		} catch (IOException e) {
-			throw new LogTracker("ObjectUtil_getLinesForString",LogAccess.DEVELOPER, value, "Can not convert io to vector", LogLevel.TRACE);
+			return null;
 		}
 	}
 

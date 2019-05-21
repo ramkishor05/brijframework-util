@@ -11,23 +11,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.brijframework.logger.LogTracker;
-import org.brijframework.logger.constant.LogAccess;
-import org.brijframework.support.enums.Access;
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
 import org.brijframework.util.casting.CastingUtil;
+import org.brijframework.util.support.Access;
 import org.brijframework.util.validator.ValidationUtil;
 
 public abstract class LogicUnit {
 
-	private static final String FIELD_NOT_FOUND = "FIELD_NOT_FOUND";
-	private static final String OBJECT_NULL_FOUND = "OBJECT_NULL_FOUND";
-	private static final String KEY_NULL_FOUND = "KEY_NULL_FOUND";
-
-	
-	private static final String LogicUnit_setField = "LogicUnit_setField";
-	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T> T collectionMethod(Collection _collection, String _property, Object... _objects) {
 		Assertion.notNull(_collection, AssertMessage.arg_null_message+" collection");
@@ -40,7 +31,6 @@ public abstract class LogicUnit {
 				try {
 					returncollection.add(method.invoke(object, _objects));
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					LogTracker.trace("LogicUtil_collectionMethod", LogAccess.DEVELOPER, e.getMessage(), e);
 				}
 			}
 		}
@@ -58,7 +48,6 @@ public abstract class LogicUnit {
 				try {
 					returncollection.add(field.get(object));
 				} catch (IllegalArgumentException | IllegalAccessException e) {
-					e.printStackTrace();
 				}
 			}
 		}
@@ -133,16 +122,13 @@ public abstract class LogicUnit {
 
 	public static <T> T setField(Object _object, String property, Object _param) {
 		if (_object == null) {
-			LogTracker.info(LogicUnit_setField, LogAccess.DEVELOPER, OBJECT_NULL_FOUND );
 			return null;
 		}
 		if (!ValidationUtil.isValidObject(property)) {
-			LogTracker.info(LogicUnit_setField, LogAccess.DEVELOPER, KEY_NULL_FOUND );
 			return null;
 		}
 		Field _field = FieldUtil.getField(_object.getClass(), property);
 		if (_field == null) {
-			LogTracker.info(LogicUnit_setField, LogAccess.DEVELOPER, FIELD_NOT_FOUND + "-> " + property);
 			return null;
 		}
 		return setField(_object, _field, _param);
@@ -156,7 +142,6 @@ public abstract class LogicUnit {
 	@SuppressWarnings("unchecked")
 	public static <T> T setField(Object _object, Field _field, Object _param) {
 		if ( !ValidationUtil.isValidObject(_object,_field)) {
-			LogTracker.info(LogicUnit_setField, LogAccess.DEVELOPER, FIELD_NOT_FOUND + "-> " + _field);
 			return null;
 		}
 		try {

@@ -5,9 +5,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.brijframework.support.enums.Access;
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
+import org.brijframework.util.support.Access;
 
 public abstract class ConstructUtil {
 
@@ -32,9 +32,4 @@ public abstract class ConstructUtil {
 		}
 		return null;
 	}
-	
-	public static void main(String[] args) {
-		System.out.println(getConstructor(ConstructUtil.class,Access.DEFAULT,String.class,int.class));
-	}
-
 }

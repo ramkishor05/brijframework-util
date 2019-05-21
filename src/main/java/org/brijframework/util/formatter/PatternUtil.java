@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.brijframework.support.constants.Patterns;
+import org.brijframework.util.support.Patterns;
 
 public class PatternUtil {
 

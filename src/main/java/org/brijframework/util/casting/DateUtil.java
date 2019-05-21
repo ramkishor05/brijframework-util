@@ -12,8 +12,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
-import org.brijframework.support.constants.Patterns;
 import org.brijframework.util.formatter.PatternUtil;
+import org.brijframework.util.support.Patterns;
 import org.brijframework.util.validator.ValidationUtil;
 
 public abstract class DateUtil {

@@ -5,10 +5,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.HashSet;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
@@ -257,8 +255,7 @@ public abstract class ReflectionUtils {
 	}
 	
 	public static void getNameListFromExternal(File jarFile,Consumer<String> action) throws Exception {
-		Set<String> classes = new HashSet<>();
-		if (!jarFile.isDirectory() && !jarFile.toString().endsWith(JAR_FILE_SUFFIX)) {
+		if (jarFile.isDirectory() || !jarFile.getName().endsWith(JAR_FILE_SUFFIX)) {
 			return ;
 		}
 		try (JarInputStream jar = new JarInputStream(new FileInputStream(jarFile))) {
@@ -271,7 +268,6 @@ public abstract class ReflectionUtils {
 				if ((entry.getName().endsWith(CLASS_FILE_SUFFIX))) {
 					String className = entry.getName().replace(DIR_STR_SEPARATOR, DOT_STR_SEPARATOR);
 					className=className.substring(0, className.lastIndexOf(DOT_CHAR_SEPARATOR));
-					classes.add(className);
 					action.accept(className);
 				}
 			}

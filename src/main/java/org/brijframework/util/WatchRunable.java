@@ -14,9 +14,6 @@ import java.nio.file.WatchService;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.brijframework.logger.LogTracker;
-import org.brijframework.logger.constant.LogAccess;
-
 public class WatchRunable implements Runnable{
 
 	private WatchConfig config;
@@ -56,7 +53,6 @@ public class WatchRunable implements Runnable{
 					File ctPath=new File(config.getDir().getPath(),file.getName());
 					if (kind == ENTRY_MODIFY ||kind ==  ENTRY_CREATE ) {
 						if(!ctPath.exists()) {
-							LogTracker.info("WatchRunable ",LogAccess.DEVELOPER, "Resource not exist!!!" + ": " + ctPath);
 							continue;
 						}
 						Long lastModified=updated.get(ctPath.getAbsolutePath());
@@ -65,7 +61,6 @@ public class WatchRunable implements Runnable{
 						}else {
 							updated.put(ctPath.getAbsolutePath(),ctPath.lastModified());
 						}
-						LogTracker.info("WatchRunable ",LogAccess.DEVELOPER, "Resource file has changed!!!" + ": " + ctPath+" lastModified at -> "+ctPath.lastModified());
 						config.recall(ctPath);
 					}
 				}

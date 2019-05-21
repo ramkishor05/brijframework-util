@@ -19,8 +19,6 @@ import java.util.zip.ZipOutputStream;
 
 import javax.swing.text.MaskFormatter;
 
-import org.brijframework.logger.LogTracker;
-import org.brijframework.logger.constant.LogAccess;
 import org.brijframework.util.text.StringUtil;
 
 public abstract class FormatUtil {
@@ -409,7 +407,6 @@ public abstract class FormatUtil {
 			maskFormatter.setValueContainsLiteralCharacters(false);
 			return maskFormatter.valueToString(val);
 		} catch (ParseException e) {
-			LogTracker.info("FormatUtil_customFormatter", LogAccess.DEVELOPER, "Unable to open stream");
 		}
 		return formate;
 	}
@@ -428,7 +425,6 @@ public abstract class FormatUtil {
 		try {
 			messageFormat = StringUtil.isEmpty(_messageString) ? null : new MessageFormat(_messageString);
 		} catch (IllegalArgumentException e) {
-			LogTracker.info("FormatUtil_formatMessage", LogAccess.DEVELOPER, "Message is not correctly formated");
 		}
 		return messageFormat;
 	}
@@ -444,7 +440,7 @@ public abstract class FormatUtil {
 	public String formatMessage(String messageString, Object[] params) {
 		MessageFormat messageFormat = this.getMessageFormat(messageString);
 		if (messageFormat == null) {
-			LogTracker.info("FormatUtil_formatMessage", LogAccess.DEVELOPER, "Message is not correctly formated");
+		   return null;
 		}
 		return messageFormat.format(params);
 	}

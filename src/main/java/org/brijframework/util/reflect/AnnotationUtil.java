@@ -13,12 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.brijframework.logger.LogTracker;
-import org.brijframework.logger.constant.LogAccess;
-
 public abstract class AnnotationUtil {
-	private static final String AnnotationData = "AnnotationUtil_getAnnotationData";
-
 	/**
 	 * Get annotation object from class
 	 * 
@@ -186,7 +181,6 @@ public abstract class AnnotationUtil {
 					_returnMap.put(method.getName(), method.invoke(annotation));
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				LogTracker.trace(AnnotationData, LogAccess.DEVELOPER, _class, e, e.getMessage());
 			}
 		}
 		return _returnMap;
@@ -205,7 +199,6 @@ public abstract class AnnotationUtil {
 					_returnMap.put(method.getName(), method.invoke(annotation));
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				LogTracker.trace(AnnotationData, LogAccess.DEVELOPER, _class, e, e.getMessage());
 			}
 		}
 		return _returnMap;
@@ -224,7 +217,6 @@ public abstract class AnnotationUtil {
 					_returnMap.put(method.getName(), method.invoke(annotation));
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				LogTracker.trace(AnnotationData, LogAccess.DEVELOPER, _class, e, e.getMessage());
 			}
 		}
 		return _returnMap;
@@ -258,7 +250,6 @@ public abstract class AnnotationUtil {
 					_returnMap.put(method.getName(), method.invoke(annotation));
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				LogTracker.trace(AnnotationData, LogAccess.DEVELOPER, _field, e, e.getMessage());
 			}
 		}
 		return _returnMap;
@@ -284,7 +275,6 @@ public abstract class AnnotationUtil {
 					_returnMap.put(method.getName(), method.invoke(annotation));
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				LogTracker.trace(AnnotationData, LogAccess.DEVELOPER, method, e, e.getMessage());
 			}
 		}
 		return _returnMap;
@@ -306,7 +296,6 @@ public abstract class AnnotationUtil {
 					_returnMap.put(method.getName(), method.invoke(_annotation));
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				LogTracker.trace(AnnotationData, LogAccess.DEVELOPER, method, e, e.getMessage());
 			}
 		}
 		return _returnMap;

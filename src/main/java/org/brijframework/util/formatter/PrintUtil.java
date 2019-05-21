@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.brijframework.support.enums.Access;
 import org.brijframework.util.accessor.PropertyAccessorUtil;
 import org.brijframework.util.reflect.FieldUtil;
+import org.brijframework.util.support.Access;
 import org.brijframework.util.validator.ValidationUtil;
 
 public class PrintUtil {

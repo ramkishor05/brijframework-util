@@ -69,6 +69,19 @@ public abstract class InstanceUtil {
 		Assertion.notNull(_className, AssertMessage.class_name_null_message);
 		return (T) getInstance(ClassUtil.getClass(_className), params);
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T getInstance(Constructor<?> constructor, Object... params) {
+		Assertion.notNull(constructor, AssertMessage.class_name_null_message);
+		try {
+			return (T) constructor.newInstance(params);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	
 	/**

@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import org.brijframework.logger.LogTracker;
-import org.brijframework.logger.constant.LogAccess;
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
 import org.brijframework.util.validator.ValidationUtil;
@@ -42,9 +40,8 @@ public abstract class ClassUtil {
 		try {
 			return Class.forName(_className);
 		} catch (ClassNotFoundException e) {
-			LogTracker.trace("ClassUtil_getClass", LogAccess.DEVELOPER, e.getMessage(), e);
+			return null;
 		}
-		return null;
 	}
 
 	/**

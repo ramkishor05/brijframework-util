@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.brijframework.logger.LogTracker;
-import org.brijframework.logger.constant.LogAccess;
 import org.brijframework.util.location.DirUtil;
 import org.brijframework.util.location.PathUtil;
 import org.brijframework.util.location.StreamUtil;
@@ -24,10 +22,6 @@ import org.brijframework.util.validator.ValidationUtil;
 
 public class ResourcesUtil {
 	private static final String META_INF = "META-INF";
-	private static final String ResourcesLoader_getListFromXMLFile = "ResourcesLoader_getListFromXMLFile";
-	private static final String ResourcesLoader_getMapFromXMLFile = "ResourcesLoader_getMapFromXMLFile";
-	private static final String ResourcesLoader_getLisFromJsonFile = "ResourcesLoader_getLisFromJsonFile";
-	private static final String ResourcesLoader_dirCreate = "ResourcesLoader_dirCreate";
 
 	public static Collection<? extends File> getCurrentResources(String path, String extesions) throws IOException {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -272,7 +266,6 @@ public class ResourcesUtil {
 		for (String path : dirs) {
 			File file = new File(PathUtil.locateURIConfig(path));
 			if (!DirUtil.createFolder(file)) {
-				LogTracker.info(ResourcesLoader_dirCreate, LogAccess.DEVELOPER, "create new dir for meta data:" + path);
 			}
 		}
 		return true;
@@ -289,8 +282,7 @@ public class ResourcesUtil {
 					try {
 						json = new String(FileUtil.loadCharFile(filez));
 					} catch (Exception e) {
-						LogTracker.trace(ResourcesLoader_getLisFromJsonFile, LogAccess.DEVELOPER, dir, e,
-								e.getMessage());
+						continue;
 					}
 					if (!json.isEmpty()) {
 						List<Object> list = JSONUtil.getListFromJSONArray(json);
@@ -304,7 +296,7 @@ public class ResourcesUtil {
 				try {
 					json = new String(FileUtil.loadCharFile(file));
 				} catch (Exception e) {
-					LogTracker.trace(ResourcesLoader_getLisFromJsonFile, LogAccess.DEVELOPER, dir, e, e.getMessage());
+					return null;
 				}
 				if (!json.isEmpty()) {
 					List<Object> list = JSONUtil.getListFromJSONArray(json);
@@ -348,8 +340,7 @@ public class ResourcesUtil {
 					try {
 						xml = new String(FileUtil.loadCharFile(filez));
 					} catch (Exception e) {
-						LogTracker.trace(ResourcesLoader_getListFromXMLFile, LogAccess.DEVELOPER, dir, e,
-								e.getMessage());
+						continue;
 					}
 					if (!xml.isEmpty()) {
 						Map<String, Object> map = XMLUtil.rootMapFromXML(xml);
@@ -362,10 +353,9 @@ public class ResourcesUtil {
 				try {
 					xml = new String(FileUtil.loadCharFile(file));
 				} catch (Exception e) {
-					LogTracker.trace(ResourcesLoader_getListFromXMLFile, LogAccess.DEVELOPER, dir, e, e.getMessage());
+			       return null;
 				}
 				if (!ValidationUtil.isEmptyObject(xml)) {
-					LogTracker.info(ResourcesLoader_getListFromXMLFile, LogAccess.DEVELOPER, xml, "Not valid xml");
 					return null;
 				}
 				Map<?, ?> map = XMLUtil.rootMapFromXML(xml);
@@ -385,10 +375,9 @@ public class ResourcesUtil {
 		try {
 			xml = new String(FileUtil.loadCharFile(file));
 		} catch (Exception e) {
-			LogTracker.trace(ResourcesLoader_getMapFromXMLFile, LogAccess.DEVELOPER, filePath, e, e.getMessage());
+			return null;
 		}
 		if (!ValidationUtil.isEmptyObject(xml)) {
-			LogTracker.info(ResourcesLoader_getMapFromXMLFile, LogAccess.DEVELOPER, filePath, "Not valid xml");
 			return null;
 		}
 		return (Map<String, Object>) XMLUtil.rootMapFromXML(xml);

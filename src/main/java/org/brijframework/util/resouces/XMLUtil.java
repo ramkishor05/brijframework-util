@@ -12,8 +12,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.brijframework.logger.LogTracker;
-import org.brijframework.logger.constant.LogAccess;
 import org.brijframework.util.validator.ValidationUtil;
 import org.json.JSONException;
 import org.json.XML;
@@ -62,9 +60,8 @@ public class XMLUtil {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			return builder.parse(new InputSource(new StringReader(_string)));
 		} catch (Exception e) {
-			 LogTracker.info("XMLConvertion_xmlTextToDocument",LogAccess.DEVELOPER,"Message is not correctly formated");
+			return null;
 		}
-		return null;
 	}
 
 	// XML --> Hashtable XML --> Bytes -->
@@ -87,9 +84,8 @@ public class XMLUtil {
 			transformer.transform(domSource, result);
 			return writer.toString();
 		} catch (TransformerException ex) {
-			 LogTracker.info("XMLConvertion_documentToText",LogAccess.DEVELOPER,"Message is not correctly formated");
-	  }
-		return null;
+			return null;
+	    }
 	}
 	
 	

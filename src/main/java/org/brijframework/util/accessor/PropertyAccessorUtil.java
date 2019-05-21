@@ -7,13 +7,11 @@ import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.brijframework.logger.LogTracker;
-import org.brijframework.logger.constant.LogAccess;
-import org.brijframework.support.enums.Access;
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
 import org.brijframework.util.casting.CastingUtil;
 import org.brijframework.util.reflect.FieldUtil;
+import org.brijframework.util.support.Access;
 
 public class PropertyAccessorUtil{
 
@@ -38,10 +36,10 @@ public class PropertyAccessorUtil{
 			if (colling instanceof Field) {
 				return setProperty(bean, (Field) colling, value);
 			}
+			return null;
 		} catch (IllegalArgumentException e) {
-			LogTracker.trace(PropertyAccessorUtil.class.getSimpleName() + "_setProperty", LogAccess.DEVELOPER, "AccessException",e);
+			return null;
 		}
-		return null;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -52,9 +50,8 @@ public class PropertyAccessorUtil{
 			colling.invoke(bean, CastingUtil.castObject(value, colling.getParameterTypes()[0]));
 			return (T) value;
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			LogTracker.trace(PropertyAccessorUtil.class.getSimpleName() + "_setProperty", LogAccess.DEVELOPER, "AccessException",e);
+			return null;
 		}
-		return null;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -65,7 +62,6 @@ public class PropertyAccessorUtil{
 			colling.set(bean, CastingUtil.castObject(value, colling.getType()));
 			return (T) value;
 		} catch (IllegalAccessException | IllegalArgumentException e) {
-			LogTracker.trace(PropertyAccessorUtil.class.getSimpleName() + "_setProperty", LogAccess.DEVELOPER, "AccessException",e);
 		}
 		return null;
 	}
@@ -93,7 +89,6 @@ public class PropertyAccessorUtil{
 				return getProperty(bean, (Field)colling,level);
 			}
 		} catch (IllegalArgumentException e) {
-			LogTracker.trace(PropertyAccessorUtil.class.getSimpleName() + "_getProperty", LogAccess.DEVELOPER, "AccessException",e);
 		}
 		return null;
 	}
@@ -107,7 +102,6 @@ public class PropertyAccessorUtil{
 			return (T) colling.invoke(bean);
 		}
 		catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			LogTracker.trace(PropertyAccessorUtil.class.getSimpleName() + "_getProperty", LogAccess.DEVELOPER, "AccessException",e);
 		}
 		return null;
 	}
@@ -121,7 +115,6 @@ public class PropertyAccessorUtil{
 			return (T) colling.get(bean);
 		}
 		catch (IllegalAccessException | IllegalArgumentException e) {
-			LogTracker.trace(PropertyAccessorUtil.class.getSimpleName() + "_getProperty", LogAccess.DEVELOPER, "AccessException",e);
 		}
 		return null;
 	}
@@ -134,7 +127,6 @@ public class PropertyAccessorUtil{
 			return (T) colling.get(bean);
 		}
 		catch (IllegalAccessException | IllegalArgumentException e) {
-			LogTracker.trace(PropertyAccessorUtil.class.getSimpleName() + "_getProperty", LogAccess.DEVELOPER, "AccessException",e);
 		}
 		return null;
 	}
@@ -144,7 +136,6 @@ public class PropertyAccessorUtil{
 		try {
 			return CastingUtil.boolValue(getProperty(bean, field, level));
 		} catch (IllegalArgumentException e) {
-			LogTracker.trace(PropertyAccessorUtil.class.getSimpleName() + "_isProperty", LogAccess.DEVELOPER, "AccessException",e);
 		}
 		return false;
 	}

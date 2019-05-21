@@ -7,9 +7,9 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.brijframework.support.enums.Access;
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
+import org.brijframework.util.support.Access;
 import org.brijframework.util.validator.ValidationUtil;
 
 public abstract class FieldUtil {

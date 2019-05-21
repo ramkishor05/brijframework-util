@@ -6,9 +6,6 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.brijframework.logger.LogTracker;
-import org.brijframework.logger.constant.LogAccess;
-
 public class FilterUtil {
 	public static List<File> folderList = new ArrayList<>();
 	public static List<File> filelist = new ArrayList<>();
@@ -28,9 +25,6 @@ public class FilterUtil {
 		};
 		File dir = new File(dirPath);
 		File[] files = dir.listFiles(extensionFilter);
-		if (files.length == 0) {
-			LogTracker.info("FileFilterUtil_getFilesListByExtension", LogAccess.DEVELOPER, "Files not found");
-		}
 		return files;
 	}
 
@@ -49,10 +43,6 @@ public class FilterUtil {
 		};
 		File dir = new File(dirPath);
 		File[] files = dir.listFiles(sizeFilter);
-		if (files.length == 0) {
-			LogTracker.info("FileFilterUtil_getFileListBySize", LogAccess.DEVELOPER, new Object() {
-			}, new Exception(), "Unable to Files  \r\n");
-		}
 		return files;
 	}
 

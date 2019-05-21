@@ -13,8 +13,6 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.Vector;
 
-import org.brijframework.logger.LogTracker;
-import org.brijframework.logger.constant.LogAccess;
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
 import org.brijframework.util.casting.DateUtil;
@@ -152,7 +150,6 @@ public abstract class DirUtil {
 			logWriter.write("");
 			logWriter.flush();
 		} catch (IOException e) {
-			LogTracker.trace("createFile", LogAccess.DEVELOPER, file, e, "Could not parse string as datevalue");
 		}
 		return status;
 	}
@@ -221,11 +218,9 @@ public abstract class DirUtil {
 				fileMod.setTime(new Date(delfile.lastModified()));
 				String fileName = list[i].substring(0, list[i].lastIndexOf("."));
 				String extensionName = list[i].substring(list[i].lastIndexOf(".") + 1, list[i].length());
-				System.out.println("File " + fileName + "ext" + extensionName);
 				delfile.renameTo(
 						new File(file, fileName + "_" + DateUtil.dateTimeString(fileMod) + "." + extensionName));
 			} catch (Exception e) {
-				LogTracker.trace("FileDirUtil_renameDir_" + e.getClass().getSimpleName(), LogAccess.DEVELOPER, file, e, "Unable to delete Files  ");
 			}
 		}
 	}
@@ -238,7 +233,6 @@ public abstract class DirUtil {
 				File delfile = new File(file, list[i]);
 				delfile.delete();
 			} catch (Exception e) {
-				LogTracker.trace("FileDirUtil_deleteDir_" + e.getClass().getSimpleName(), LogAccess.DEVELOPER, file, e, "Unable to delete Files  ");
 			}
 		}
 	}
@@ -257,7 +251,6 @@ public abstract class DirUtil {
 					delfile.delete();
 				}
 			} catch (Exception e) {
-				LogTracker.trace("FileDirUtil_deleteAllFile_" + e.getClass().getSimpleName(), LogAccess.DEVELOPER, file, e, "Unable to delete Files  ");
 			}
 		}
 	}
@@ -321,8 +314,6 @@ public abstract class DirUtil {
 			throw new IllegalArgumentException("The given path does not exist.");
 		}
 		if (!isFile(dir)) {
-			LogTracker.trace("FileDirUtil_getDirFolders", LogAccess.DEVELOPER, new Object() {
-			}, new Exception(), "Unable to dirPath Files  \r\n");
 		}
 		File[] subFiles = dir.listFiles();
 		if (subFiles != null && subFiles.length > 0) {

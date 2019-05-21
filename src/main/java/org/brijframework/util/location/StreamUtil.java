@@ -16,8 +16,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-import org.brijframework.logger.LogTracker;
-import org.brijframework.logger.constant.LogAccess;
 import org.brijframework.util.asserts.Assertion;
 import org.brijframework.util.resouces.FilterUtil;
 
@@ -45,7 +43,7 @@ public class StreamUtil {
 		try {
 			uri = new File(url.toURI());
 		} catch (URISyntaxException e) {
-			LogTracker.trace("StreamUtil_getAllResurces", LogAccess.DEVELOPER, path, e, "Unable to uri  \r\n");
+			return null;
 		}
 		return FilterUtil.dirFilesWithSubDir(uri.getPath(), extension);
 	}
@@ -54,17 +52,14 @@ public class StreamUtil {
 		final URL url = PathUtil.locateURLConfig(path);
 
 		if (url == null) {
-			String msg = "unable To Locate ConfigFile";
-			LogTracker.info("StreamUtil_getConfigStream", LogAccess.DEVELOPER, msg);
+			return null;
 		}
 
 		try {
 			return url.openStream();
 		} catch (IOException e) {
-			LogTracker.trace("StreamUtil_getConfigStream", LogAccess.DEVELOPER, path, e,
-					"Unable to open config file: " + path);
+			return null;
 		}
-		return null;
 	}
 
 	public static InputStream getResourceAsStream(String resource) {
@@ -79,10 +74,6 @@ public class StreamUtil {
 		}
 		if (stream == null) {
 			stream = org.omg.CORBA.Environment.class.getClassLoader().getResourceAsStream(stripped);
-		}
-		if (stream == null) {
-			String msg = "unable To Locate stream";
-			LogTracker.info("StreamUtil_getResourceAsStream", LogAccess.DEVELOPER, msg);
 		}
 		return stream;
 	}
@@ -107,12 +98,6 @@ public class StreamUtil {
 		if (stream == null && hasLeadingSlash) {
 			stream = org.omg.CORBA.Environment.class.getClassLoader().getResourceAsStream(stripped);
 		}
-
-		if (stream == null) {
-			String msg = "unable To Locate stream";
-			LogTracker.info("StreamUtil_getUserResourceAsStream", LogAccess.DEVELOPER, msg);
-		}
-
 		return stream;
 	}
 
@@ -126,10 +111,8 @@ public class StreamUtil {
 			io.close();
 			return buffer.toString();
 		} catch (Exception e) {
-			String msg = "unable To Locate stream";
-			LogTracker.info("StreamUtil_loadFromStream", LogAccess.DEVELOPER, msg);
+			return null;
 		}
-		return null;
 	}
 
 	public static byte[] loadInBufferModeFromStream(InputStream inputStream) throws IOException {

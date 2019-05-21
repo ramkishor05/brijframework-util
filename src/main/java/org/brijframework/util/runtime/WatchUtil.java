@@ -15,9 +15,6 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 
-import org.brijframework.logger.LogTracker;
-import org.brijframework.logger.constant.LogAccess;
-
 public class WatchUtil {
 	public static void watchService(URI paths) {
 		try {
@@ -43,7 +40,6 @@ public class WatchUtil {
 					Path fileName = ev.context();
 					
 					System.out.println(kind.name() + ": " + fileName);
-					LogTracker.info("WatchUtil",LogAccess.DEVELOPER, kind.name() + ": " + fileName);
 					if (kind == ENTRY_MODIFY && 
 							fileName.toString().equals("FileWatchUtil.java")) {
 						System.out.println("My source file has changed!!!");
@@ -61,7 +57,6 @@ public class WatchUtil {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static void watchFile(File file) throws IOException {
 		WatchService watcher = FileSystems.getDefault().newWatchService();
 		Path dir = Paths.get(file.getParent());
@@ -78,9 +73,6 @@ public class WatchUtil {
 			}
 			for (WatchEvent<?> event : key.pollEvents()) {
 				WatchEvent.Kind<?> kind = event.kind();
-				WatchEvent<Path> ev = (WatchEvent<Path>) event;
-				Path fileName = ev.context();
-				LogTracker.info("WatchUtil",LogAccess.DEVELOPER, kind.name().toLowerCase() + ": " + fileName);
 				if (kind == ENTRY_MODIFY ) {
 					System.out.println("My source file has changed!!!");
 				}

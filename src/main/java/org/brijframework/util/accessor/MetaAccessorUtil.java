@@ -13,14 +13,12 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.brijframework.logger.LogTracker;
-import org.brijframework.logger.constant.LogAccess;
-import org.brijframework.support.enums.Access;
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
 import org.brijframework.util.reflect.FieldUtil;
 import org.brijframework.util.reflect.MethodUtil;
 import org.brijframework.util.reflect.ParamUtil;
+import org.brijframework.util.support.Access;
 import org.brijframework.util.validator.ValidationUtil;
 
 public class MetaAccessorUtil {
@@ -36,10 +34,8 @@ public class MetaAccessorUtil {
 			Method getter = getterPropertyDescriptor(meta, field);
 			return getter != null ? getter :getFieldMeta(meta, field, level);
 		} catch (IllegalArgumentException | IntrospectionException e) {
-			LogTracker.trace(MetaAccessorUtil.class.getSimpleName() + "_getProperty", LogAccess.DEVELOPER, "AccessException",
-					e);
+			return null;
 		}
-		return null;
 	}
 
 	public static AccessibleObject setPropertyMeta(Class<?> meta, String field, Object value) {
@@ -52,10 +48,8 @@ public class MetaAccessorUtil {
 			Method setter = setterPropertyDescriptor(meta, field, value);
 			return setter != null ?  setter :  getFieldMeta(meta, field, level);
 		} catch (IllegalArgumentException | IntrospectionException e) {
-			LogTracker.trace(MetaAccessorUtil.class.getSimpleName() + "_getProperty", LogAccess.DEVELOPER, "AccessException",
-					e);
+			return null;
 		}
-		return null;
 	}
 
 	public static List<AccessibleObject> getPropertiesMeta(Class<?> meta) {
@@ -102,19 +96,16 @@ public class MetaAccessorUtil {
 			Method method = (Method) getMethodDescriptor(meta, _method, paramObjects);
 			return method != null ? method : (Method) getMethodMeta(meta, level, _method, paramObjects);
 		} catch (IntrospectionException e) {
-			LogTracker.trace(MetaAccessorUtil.class.getSimpleName() + "_getLogicMeta", LogAccess.DEVELOPER, "AccessException",
-					e);
+			return null;
 		}
-		return null;
 	}
 	
 	public static Method getterPropertyMeta(Class<?> _meta, String _name){
 		try {
 			return getterPropertyDescriptor(_meta, _name);
 		} catch (IntrospectionException e) {
-			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 
 	public static Method getterPropertyDescriptor(Class<?> _meta, String _name) throws IntrospectionException {
@@ -188,9 +179,8 @@ public class MetaAccessorUtil {
 		try {
 			return FieldUtil.getField(_meta, _name, access);
 		} catch (SecurityException e) {
-			LogTracker.trace(MetaAccessorUtil.class.getSimpleName() + "_getter", LogAccess.DEVELOPER, "AccessException", e);
+			return null;
 		}
-		return null;
 	}
 
 	public static Method getMethodDescriptor(Class<?> _meta, String method, Object... paramClasses)
@@ -211,20 +201,16 @@ public class MetaAccessorUtil {
 		try {
 			return MethodUtil.getMethod(_meta, _name, level, params);
 		} catch (SecurityException e) {
-			LogTracker.trace(MetaAccessorUtil.class.getSimpleName() + "_getMetaMethod", LogAccess.DEVELOPER, "AccessException",
-					e);
+			return null;
 		}
-		return null;
 	}
 
 	public static Method getMethodMeta(Class<?> _meta, Access level, String _name, int params) {
 		try {
 			return MethodUtil.getMethod(_meta, _name, params, level);
 		} catch (SecurityException e) {
-			LogTracker.trace(MetaAccessorUtil.class.getSimpleName() + "_getMetaMethod", LogAccess.DEVELOPER, "AccessException",
-					e);
+			return null;
 		}
-		return null;
 	}
 
 	public static Set<String> getNamePropertiesMeta(Class<?> meta) {

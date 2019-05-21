@@ -3,9 +3,9 @@ package org.brijframework.util.accessor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.brijframework.support.enums.Access;
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
+import org.brijframework.util.support.Access;
 
 public class LogicAccessorUtil{
 

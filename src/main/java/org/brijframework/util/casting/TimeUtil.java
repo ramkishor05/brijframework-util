@@ -10,8 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.brijframework.logger.LogTracker;
-import org.brijframework.logger.constant.LogAccess;
 import org.brijframework.util.formatter.PatternUtil;
 import org.brijframework.util.text.StringUtil;
 import org.brijframework.util.validator.ValidationUtil;
@@ -110,7 +108,6 @@ public abstract class TimeUtil {
 		try {
 			date = timeFormat.parse(timeDate.toString());
 		} catch (ParseException e) {
-			LogTracker.info("TimeUtil_getDateTime", LogAccess.DEVELOPER, timeDate + " Parse Exception");
 		}
 		return date;
 	}
@@ -140,7 +137,7 @@ public abstract class TimeUtil {
 		try {
 			date = dateFormat.parse(time.toString());
 		} catch (ParseException e) {
-			LogTracker.info("TimeUtil_getCurrentTime", LogAccess.DEVELOPER, timeStr + " Parse Exception");
+			return null;
 		}
 		Date current = new Date();
 		current.setHours(date.getHours());
