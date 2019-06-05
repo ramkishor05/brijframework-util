@@ -125,14 +125,11 @@ public abstract class ClassUtil {
 		return ClassUtil.getAllSuperInterface(_class).contains(_interface);
 	}
 
-	public static Object collectionParamType(Field _field) {
+	public static Class<?> collectionParamType(Field _field) {
 		Assertion.notNull(_field, AssertMessage.field_object_null_message);
 		if (isCollection(_field.getType())) {
 			ParameterizedType listType = (ParameterizedType) _field.getGenericType();
-			if (listType.getActualTypeArguments().length < 1) {
-				return List.class.toGenericString();
-			}
-			return listType.getActualTypeArguments()[0];
+			return (Class<?>)listType.getActualTypeArguments()[0];
 		}
 		return null;
 	}
