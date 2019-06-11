@@ -1,7 +1,9 @@
 package org.brijframework.util.reflect;
 
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -132,6 +134,24 @@ public abstract class ClassUtil {
 			return (Class<?>)listType.getActualTypeArguments()[0];
 		}
 		return null;
+	}
+	
+	public static Class<?> collectionParamType(Method _field) {
+		Assertion.notNull(_field, AssertMessage.field_object_null_message);
+		if (isCollection(_field.getReturnType())) {
+			ParameterizedType listType = (ParameterizedType) _field.getGenericReturnType();
+			return (Class<?>)listType.getActualTypeArguments()[0];
+		}
+		return null;
+	}
+	
+	public static Class<?> collectionParamType(AccessibleObject _field) {
+		Assertion.notNull(_field, AssertMessage.field_object_null_message);
+		if(_field instanceof Method) {
+			return collectionParamType((Method)_field);
+		}else {
+			return collectionParamType((Field)_field);
+		}
 	}
 
 	public static Class<?> getCollectionType(Collection<?> _collection) {

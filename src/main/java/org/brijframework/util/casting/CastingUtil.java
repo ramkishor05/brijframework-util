@@ -619,12 +619,6 @@ public abstract class CastingUtil {
 			return null;
 		}
 
-		if (Class.class.isAssignableFrom(type)) {
-			if(String.class.isAssignableFrom(_value.getClass())){
-				return _value.toString();
-			}
-		}
-		
 		if (String.class.isAssignableFrom(type)) {
 			return stringValue(_value);
 		}
@@ -645,6 +639,13 @@ public abstract class CastingUtil {
 			}
 			return inObject;
 		}
+
+		if (Class.class.isAssignableFrom(type)) {
+			if(String.class.isAssignableFrom(_value.getClass())){
+				return _value.toString();
+			}
+		}
+		
 		if(_value!=null && !type.isAssignableFrom(_value.getClass())){
 			return null;
 		}
