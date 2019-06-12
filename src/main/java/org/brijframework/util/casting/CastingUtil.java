@@ -2,6 +2,7 @@ package org.brijframework.util.casting;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -11,10 +12,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.brijframework.util.reflect.InstanceUtil;
 import org.brijframework.util.reflect.LogicUnit;
@@ -65,6 +69,68 @@ public abstract class CastingUtil {
 		for (int i = 0; i < c; i++) {
 			_integers[i] = Integer.valueOf(i - 3);
 		}
+	}
+	
+	/**
+	 * Find implement class from given class for create object
+	 * 
+	 * @param field
+	 * @param type
+	 * @return Class
+	 */
+	public static Class<?> getTargetClass(Class<?> type) {
+		if (type == null) {
+			return null;
+		}
+		if (!type.getName().equals(Type.class.getName())&& !(type.isInterface() || Modifier.isAbstract(type.getModifiers()))) {
+			return type;
+		}
+		if (Map.class.isAssignableFrom(type)) {
+			return HashMap.class;
+		} else if (List.class.isAssignableFrom(type)) {
+			return ArrayList.class;
+		} else if (Set.class.isAssignableFrom(type)) {
+			return HashSet.class;
+		} else if (Collection.class.isAssignableFrom(type)) {
+			return ArrayList.class;
+		}
+		return type;
+	}
+	
+	/**
+	 * Find implement class from given class for create object
+	 * 
+	 * @param field
+	 * @param type
+	 * @return Class
+	 */
+	public static Class<?> getTargetClass(Method field, Class<?> type) {
+		Class<?> typeOf=getTargetClass(type);
+		if (typeOf == null) {
+			return null;
+		}
+		if (typeOf.getName().equals(Type.class.getName())) {
+			return field.getReturnType();
+		}
+		return type;
+	}
+	
+	/**
+	 * Find implement class from given class for create object
+	 * 
+	 * @param field
+	 * @param type
+	 * @return Class
+	 */
+	public static Class<?> getTargetClass(Field field, Class<?> type) {
+		Class<?> typeOf=getTargetClass(type);
+		if (typeOf == null) {
+			return null;
+		}
+		if (typeOf.getName().equals(Type.class.getName())) {
+			return field.getType();
+		}
+		return type;
 	}
 	
 	public static Object defaultValue(Field field){
@@ -582,6 +648,9 @@ public abstract class CastingUtil {
 	
 	@SuppressWarnings({ "unchecked" })
 	public static Object castObject(Object _value, Class<?> type) {
+		if(_value instanceof Map) {
+			System.out.println(_value+"="+type);
+		}
 		if (Boolean.class.isAssignableFrom(type)|| type.toString().equals("boolean")) {
 			return boolValue(_value);
 		}
@@ -606,9 +675,6 @@ public abstract class CastingUtil {
 		if (_value == null) {
 			return null;
 		}
-		if(type.isAssignableFrom(_value.getClass())){
-			return _value;
-		}
 		if (Enum.class.isAssignableFrom(type)) {
 			Object[] objects = type.getEnumConstants();
 			for (Object object : objects) {
@@ -632,10 +698,12 @@ public abstract class CastingUtil {
 			return DateUtil.sqlTimestempObject(_value);
 		}
 		if (Map.class.isAssignableFrom(_value.getClass())) {
-			Object inObject = InstanceUtil.getInstance(type);
+			Map<Object,Object> inObject = (Map<Object, Object>) InstanceUtil.getInstance(getTargetClass(type));
+			System.out.println("inObject="+inObject);
 			Map<String, Object> _map = (Map<String, Object>) _value;
 			for (String key : _map.keySet()) {
-				LogicUnit.setField(inObject, key, _map.get(key));
+				
+				inObject.put(key, _map.get(key));
 			}
 			return inObject;
 		}
@@ -648,6 +716,10 @@ public abstract class CastingUtil {
 		
 		if(_value!=null && !type.isAssignableFrom(_value.getClass())){
 			return null;
+		}
+		
+		if(type.isAssignableFrom(_value.getClass())){
+			return _value;
 		}
 		return _value;
 	}
