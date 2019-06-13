@@ -648,9 +648,6 @@ public abstract class CastingUtil {
 	
 	@SuppressWarnings({ "unchecked" })
 	public static Object castObject(Object _value, Class<?> type) {
-		if(_value instanceof Map) {
-			System.out.println(_value+"="+type);
-		}
 		if (Boolean.class.isAssignableFrom(type)|| type.toString().equals("boolean")) {
 			return boolValue(_value);
 		}
@@ -699,10 +696,8 @@ public abstract class CastingUtil {
 		}
 		if (Map.class.isAssignableFrom(_value.getClass())) {
 			Map<Object,Object> inObject = (Map<Object, Object>) InstanceUtil.getInstance(getTargetClass(type));
-			System.out.println("inObject="+inObject);
 			Map<String, Object> _map = (Map<String, Object>) _value;
 			for (String key : _map.keySet()) {
-				
 				inObject.put(key, _map.get(key));
 			}
 			return inObject;
