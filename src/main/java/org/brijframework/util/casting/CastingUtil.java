@@ -82,7 +82,7 @@ public abstract class CastingUtil {
 		if (type == null) {
 			return null;
 		}
-		if (!type.getName().equals(Type.class.getName())&& !(type.isInterface() || Modifier.isAbstract(type.getModifiers()))) {
+		if (!type.getName().equals(Type.class.getName())&& InstanceUtil.isAssignable(type)) {
 			return type;
 		}
 		if (Map.class.isAssignableFrom(type)) {
@@ -130,7 +130,7 @@ public abstract class CastingUtil {
 		if (typeOf.getName().equals(Type.class.getName())) {
 			return field.getType();
 		}
-		return type;
+		return typeOf;
 	}
 	
 	public static Object defaultValue(Field field){
