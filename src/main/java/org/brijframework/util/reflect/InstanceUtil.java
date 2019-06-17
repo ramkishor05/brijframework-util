@@ -19,6 +19,15 @@ import org.brijframework.util.asserts.Assertion;
 public abstract class InstanceUtil {
 	
 
+	public static boolean isAssignable(Class<?> cls) {
+		if(null ==cls) {
+			return false;
+		}
+		
+		return !cls.isInterface() && !Modifier.isAbstract(cls.getModifiers());
+	}
+
+
 	/**
 	 * Validate arguments of constructor of class
 	 * 
@@ -94,7 +103,7 @@ public abstract class InstanceUtil {
 	@SuppressWarnings("unchecked")
 	public static <T> T getInstance(Class<T> _class, Object... params) {
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);
-		if(_class.isInterface()||_class.getModifiers()==Modifier.ABSTRACT) {
+		if(_class.isInterface()||Modifier.isAbstract(_class.getModifiers())) {
 			return null;
 		}
 		try {

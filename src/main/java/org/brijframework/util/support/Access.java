@@ -165,6 +165,7 @@ public enum Access {
 	}
 
 	public boolean isAccess(Integer in) {
+		if(groupmap.get(this.id)!=null)
 		for (Integer id : groupmap.get(this.id)) {
 			if (in.equals(id)) {
 				return true;
@@ -174,6 +175,7 @@ public enum Access {
 	}
 	
 	public Integer allow(Integer in) {
+		if(groupmap.get(this.id)!=null)
 		for (Integer id : groupmap.get(this.id)) {
 			if (in.equals(id)) {
 				return id;
