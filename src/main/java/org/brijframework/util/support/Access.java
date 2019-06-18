@@ -188,4 +188,13 @@ public enum Access {
 		return this.id;
 	}
 
+	public static Access valueOf(int modifiers) {
+		for(Access access: values()) {
+			if(access.getID()==modifiers) {
+				return access;
+			}
+		}
+		return null;
+	}
+
 }

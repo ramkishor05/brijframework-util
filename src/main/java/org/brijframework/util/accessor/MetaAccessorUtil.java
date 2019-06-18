@@ -42,6 +42,16 @@ public class MetaAccessorUtil {
 		return setPropertyMeta(meta, field, Access.PUBLIC, value);
 	}
 
+	public  static AccessibleObject setPropertyMeta(Class<?> meta, String field, Access level) {
+		Assertion.notNull(field, AssertMessage.field_name_null_message);
+		try {
+			Method setter = setterPropertyDescriptor(meta, field);
+			return setter != null ?  setter :  getFieldMeta(meta, field, level);
+		} catch (IllegalArgumentException | IntrospectionException e) {
+			return null;
+		}
+	}
+	
 	public  static AccessibleObject setPropertyMeta(Class<?> meta, String field, Access level, Object value) {
 		Assertion.notNull(field, AssertMessage.field_name_null_message);
 		try {
