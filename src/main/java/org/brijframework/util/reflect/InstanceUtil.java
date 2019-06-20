@@ -24,7 +24,7 @@ public abstract class InstanceUtil {
 			return false;
 		}
 		
-		return !cls.isInterface() && !Modifier.isAbstract(cls.getModifiers());
+		return !(Modifier.isAbstract(cls.getModifiers())|| Modifier.isInterface(cls.getModifiers()));
 	}
 
 
