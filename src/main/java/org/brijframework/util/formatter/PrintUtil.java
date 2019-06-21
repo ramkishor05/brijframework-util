@@ -48,8 +48,8 @@ public class PrintUtil {
 	private static String getObjectInfo(Object parent, Object object) {
 		StringBuilder builder=new StringBuilder(object.getClass().getSimpleName()+"#"+object.hashCode());
 		builder.append("(");
-		List<Field> fields=FieldUtil.getAllField(object.getClass(),Access.PRIVATE_NO_STATIC_FINAL);
-		int len=fields.size();
+		Field[] fields=object.getClass().getFields();
+		int len=fields.length;
 		for (Field field : fields) {
 			Object value=PropertyAccessorUtil.getProperty(object, field);
 			if(value==null) {
@@ -81,7 +81,7 @@ public class PrintUtil {
 		StringBuilder builder=new StringBuilder(map.getClass().getSimpleName());
 		builder.append("(");
 		int len=map.keySet().size();
-		for (String field : map.keySet()) {
+		for (Object field : map.keySet()) {
 			Object value=map.get(field);
 			if(value==null) {
 				builder.append(field+"= null");
