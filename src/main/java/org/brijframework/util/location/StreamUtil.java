@@ -11,13 +11,21 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 import org.brijframework.util.asserts.Assertion;
 import org.brijframework.util.resouces.FilterUtil;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
 public class StreamUtil {
 	public static final int BUFFER_SIZE = 4096;
@@ -281,5 +289,29 @@ public class StreamUtil {
 		@Override
 		public void close() throws IOException {
 		}
+	}
+	
+	public static boolean writeJsonToFile(Path path,Object data) {
+		try(StringWriter out =new StringWriter()) {
+		    final ObjectMapper mapper = new ObjectMapper();
+		    ObjectWriter writer= mapper.writerWithDefaultPrettyPrinter();
+		    String json=writer.writeValueAsString(data);
+		    final byte[] bytes = json.getBytes();
+			Files.write(path, bytes, StandardOpenOption.WRITE);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public static <T>T readJsonFromFile(Path path,TypeReference<T> valueType) {
+		try(StringWriter out =new StringWriter()) {
+		    final ObjectMapper mapper = new ObjectMapper();
+		    return mapper.readValue(path.toFile(), valueType);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

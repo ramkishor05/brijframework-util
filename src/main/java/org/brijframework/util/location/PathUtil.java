@@ -17,7 +17,25 @@ import org.brijframework.util.asserts.Assertion;
 
 public abstract class PathUtil {
 	private static final String META_INF = "META-INF";
+	private static final String MAVAN_RESOURCES ="src/main/resources";
+	private static final String JAVA_RESOURCES ="src/";
 	public static ClassLoader overridenClassLoader;
+	
+	public static String getResourcesContextPath() {
+		URI path=getResoucesURI(MAVAN_RESOURCES);
+		if(path!=null) {
+			return path.getPath();
+		}
+		path=getResoucesURI(JAVA_RESOURCES);
+		if(path!=null) {
+			return path.getPath();
+		}
+		return new File("").getAbsolutePath();
+	}
+	
+	public static String getContextPath() {
+		return new File("").getAbsolutePath();
+	}
 
 	public static ClassLoader getContextClassLoader() {
 		return overridenClassLoader != null ? overridenClassLoader : Thread.currentThread().getContextClassLoader();
@@ -131,6 +149,9 @@ public abstract class PathUtil {
 	public static String getResoucesPath(String path) {
 		Assertion.notNull(path, AssertMessage.arg_null_message);
 		URL url = ClassLoader.getSystemClassLoader().getResource(path);
+		if(url==null) {
+			return null;
+		}
 		return url.getPath();
 	}
 
@@ -146,10 +167,10 @@ public abstract class PathUtil {
 		URI uri = null;
 		try {
 			uri = url.toURI();
-		} catch (URISyntaxException e) {
+		} catch (Exception e) {
 			try {
 				return PathUtil.findAsResource(_path).toURI();
-			} catch (URISyntaxException e1) {
+			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 		}
