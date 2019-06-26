@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.brijframework</groupId>
-	<artifactId>org.brijframework-util</artifactId>
+	<artifactId>brijframework-util</artifactId>
 	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
@@ -22,12 +22,6 @@
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>
 			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.brijframework</groupId>
-			<artifactId>org.brijframework-logger</artifactId>
-			<version>0.0.1</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
