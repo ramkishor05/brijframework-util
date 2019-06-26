@@ -679,4 +679,8 @@ public class StringUtil {
 		return objectKeys.split("~");
 	}
 
+	public static int indexOfIgnoreCase(String typeName, String string) {
+		return 0;
+	}
+
 }
