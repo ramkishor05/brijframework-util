@@ -25,14 +25,14 @@ public class MetaAccessorUtil {
 
 	public static AccessibleObject getPropertyMeta(Class<?> meta, String field) {
 		Assertion.notNull(field, AssertMessage.field_name_null_message);
-		return getPropertyMeta(meta, field, Access.PUBLIC);
+		return findGetterMeta(meta, field, Access.PUBLIC);
 	}
 
-	public static AccessibleObject getPropertyMeta(Class<?> meta, String field, Access level) {
+	public static AccessibleObject findGetterMeta(Class<?> meta, String field, Access level) {
 		Assertion.notNull(field, AssertMessage.field_name_null_message);
 		try {
 			Method getter = getterPropertyDescriptor(meta, field);
-			return getter != null ? getter :getFieldMeta(meta, field, level);
+			return getter != null ? getter :findFieldMeta(meta, field, level);
 		} catch (IllegalArgumentException | IntrospectionException e) {
 			return null;
 		}
@@ -42,11 +42,11 @@ public class MetaAccessorUtil {
 		return setPropertyMeta(meta, field, Access.PUBLIC, value);
 	}
 
-	public  static AccessibleObject setPropertyMeta(Class<?> meta, String field, Access level) {
+	public  static AccessibleObject findSetterMeta(Class<?> meta, String field, Access level) {
 		Assertion.notNull(field, AssertMessage.field_name_null_message);
 		try {
 			Method setter = setterPropertyDescriptor(meta, field);
-			return setter != null ?  setter :  getFieldMeta(meta, field, level);
+			return setter != null ?  setter :  findFieldMeta(meta, field, level);
 		} catch (IllegalArgumentException | IntrospectionException e) {
 			return null;
 		}
@@ -56,7 +56,7 @@ public class MetaAccessorUtil {
 		Assertion.notNull(field, AssertMessage.field_name_null_message);
 		try {
 			Method setter = setterPropertyDescriptor(meta, field, value);
-			return setter != null ?  setter :  getFieldMeta(meta, field, level);
+			return setter != null ?  setter :  findFieldMeta(meta, field, level);
 		} catch (IllegalArgumentException | IntrospectionException e) {
 			return null;
 		}
@@ -185,7 +185,7 @@ public class MetaAccessorUtil {
 		return methods.size() > 0 ? methods.get(0) : getMethodMeta(_meta, Access.PUBLIC, _name, 1);
 	}
 
-	public static Field getFieldMeta(Class<?> _meta, String _name, Access access) {
+	public static Field findFieldMeta(Class<?> _meta, String _name, Access access) {
 		try {
 			return FieldUtil.getField(_meta, _name, access);
 		} catch (SecurityException e) {
