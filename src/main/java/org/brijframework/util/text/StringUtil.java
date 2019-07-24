@@ -1,6 +1,7 @@
 package org.brijframework.util.text;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
@@ -681,6 +682,11 @@ public class StringUtil {
 
 	public static int indexOfIgnoreCase(String typeName, String string) {
 		return 0;
+	}
+
+	public static String getCsl(ArrayList<?> toEmailAddressArray, String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
