@@ -303,7 +303,7 @@ public abstract class ReflectionUtils {
 	public static Class<?> getSafeClass(String className, ClassLoader classLoader) {
 		try {
 			return Class.forName(className,false,classLoader);
-		} catch (Exception|NoClassDefFoundError e) {
+		} catch (Throwable e) {
 			return null;
 		}
 	}
