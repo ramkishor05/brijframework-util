@@ -88,6 +88,23 @@ public class ResourcesUtil {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		return classLoader.getResource(path);
 	}
+	
+	public static URL getResourceJar(String path) {
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		System.out.println(classLoader);
+		System.out.println(classLoader.getParent());
+		try {
+			Enumeration<?> enu=classLoader.getParent().getResources("");
+			while(enu.hasMoreElements()) {
+				System.out.println(enu.nextElement());
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return classLoader.getParent().getResource(path);
+	}
 
 	public static Collection<? extends File> findFiles(File directory, String... extesions) {
 		List<File> files = new ArrayList<>();
