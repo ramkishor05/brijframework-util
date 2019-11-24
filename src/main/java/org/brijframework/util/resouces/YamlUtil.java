@@ -28,6 +28,13 @@ public class YamlUtil {
 		return envproperties;
 	}
 	
+	public static Properties getEnvProperties(String yml ){
+		Properties envproperties=new Properties();
+	    HashMap<String, Object> properties=getHashMap(yml );
+		buildProps(envproperties, properties);
+		return envproperties;
+	}
+	
 	@SuppressWarnings("unchecked")
 	private static void buildProps(Properties envproperties , Map<String, Object> properties) {
 		properties.forEach((parentkey,value)->{
@@ -85,6 +92,16 @@ public class YamlUtil {
 
 	public static HashMap<String, Object> getHashMap(InputStream in){
 	    return getObjectMap(  HashMap.class ,in);
+	}
+	
+	public static HashMap<String, Object> getHashMap(String yml){
+	    return getObjectMap(  HashMap.class ,yml);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T getObjectMap(Class<?> cls,String yml){
+		Yaml yaml = new Yaml();  
+	    return (T) yaml.loadAs( yml, cls);
 	}
 	
 	@SuppressWarnings("unchecked")
