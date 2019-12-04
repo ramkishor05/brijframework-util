@@ -6,7 +6,7 @@ import java.nio.file.Files;
 
 import org.brijframework.util.resouces.ResourcesUtil;
 
-public class ConsolePrint {
+public class LoggerConsole {
 	static boolean isLoaded = false;
 
 	public static void banner() {
@@ -27,8 +27,8 @@ public class ConsolePrint {
 	}
 
 	public static void screen(String header, String message) {
-		int space = 50 - header.length();
-		System.err.printf(header + "%" + space + "s | %s", "", message + "\n");
+		int space = 60 - header.length();
+		System.out.printf(header + "%" + space + "s | %s", "", message + "\n");
 	}
 
 	public static void screen(String message) {
