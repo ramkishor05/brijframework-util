@@ -9,8 +9,10 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.brijframework.util.asserts.AssertMessage;
@@ -160,6 +162,38 @@ public class MetaAccessorUtil {
 		return getMethodMeta(_meta, Access.PUBLIC, _name, 1);
 	}
 	
+    public static Map<String, Method> setterPropertyDescriptorList(Class<?> _meta) {
+    	Map<String, Method> propertyDescriptorList=new HashMap<String, Method>();
+    	try {
+    	BeanInfo beaninfo = Introspector.getBeanInfo(_meta);
+		PropertyDescriptor pds[] = beaninfo.getPropertyDescriptors();
+		for (PropertyDescriptor pd : pds) {
+			Method setterMethod = pd.getWriteMethod();
+			if (setterMethod != null) {
+				propertyDescriptorList.put(pd.getName(), setterMethod);
+			}
+		}
+    	}catch (Exception e) {
+		}
+		return propertyDescriptorList;
+    }
+    
+    public static Map<String, Method> getterPropertyDescriptorList(Class<?> _meta) {
+    	Map<String, Method> propertyDescriptorList=new HashMap<String, Method>();
+    	try {
+    	BeanInfo beaninfo = Introspector.getBeanInfo(_meta);
+		PropertyDescriptor pds[] = beaninfo.getPropertyDescriptors();
+		for (PropertyDescriptor pd : pds) {
+			Method getterMethod = pd.getReadMethod();
+			if (getterMethod != null) {
+				propertyDescriptorList.put(pd.getName(), getterMethod);
+			}
+		}
+    	}catch (Exception e) {
+		}
+		return propertyDescriptorList;
+    }
+    
     public static Method setterPropertyDescriptor(Class<?> _meta, String _name, Object value) throws IntrospectionException {
 		BeanInfo beaninfo = Introspector.getBeanInfo(_meta);
 		PropertyDescriptor pds[] = beaninfo.getPropertyDescriptors();

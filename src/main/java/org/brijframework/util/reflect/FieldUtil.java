@@ -4,8 +4,10 @@ package org.brijframework.util.reflect;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
@@ -143,6 +145,14 @@ public abstract class FieldUtil {
 		return null;
 	}
 
+	public static Map<String,Field> getAllFieldMap(Class<?> _class, Access _accessLevel) {
+		List<Field> fields= getAllField(_class, _accessLevel);
+		Map<String,Field> properties=new HashMap<>();
+		for(Field field:fields) {
+			properties.put(field.getName(), field);
+		}
+		return properties;
+	}
 	/**
 	 * get all fields current class with following condition : <br>
 	 * PRIVATE can access all protected , public , private , default field <br>
