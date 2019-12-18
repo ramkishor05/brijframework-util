@@ -11,18 +11,18 @@ import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
 import org.brijframework.util.casting.CastingUtil;
 import org.brijframework.util.reflect.FieldUtil;
-import org.brijframework.util.support.Access;
+import org.brijframework.util.support.ReflectionAccess;
 
 public class PropertyAccessorUtil{
 
 	public static <T> T setProperty(Object bean, String field, Object value) {
 		Assertion.notNull(field, AssertMessage.arg_null_message);
-		return setProperty(bean, field, Access.PUBLIC, value);
+		return setProperty(bean, field, ReflectionAccess.PUBLIC, value);
 	}
 	
-	public static <T> T setProperty(Object bean, String field, Access level, Object value) {
+	public static <T> T setProperty(Object bean, String field, ReflectionAccess level, Object value) {
 		Assertion.notNull(field, AssertMessage.arg_null_message);
-		AccessibleObject colling = MetaAccessorUtil.setPropertyMeta(bean.getClass(), field, Access.PRIVATE, value);
+		AccessibleObject colling = MetaAccessorUtil.setPropertyMeta(bean.getClass(), field, ReflectionAccess.PRIVATE, value);
 		Assertion.notNull(colling, AssertMessage.unbounded_key_message + " " + field + " for " + bean.getClass());
 		return setProperty(bean, colling,value);
 	}
@@ -68,18 +68,18 @@ public class PropertyAccessorUtil{
 
 	public static <T> T getProperty(Object bean, String field) {
 		Assertion.notNull(field, AssertMessage.field_name_null_message);
-		return getProperty(bean, field, Access.PUBLIC);
+		return getProperty(bean, field, ReflectionAccess.PUBLIC);
 	}
 
-	public static <T> T getProperty(Object bean, String field, Access level) {
+	public static <T> T getProperty(Object bean, String field, ReflectionAccess level) {
 		Assertion.notNull(bean, AssertMessage.model_object_null_message);
 		Assertion.notNull(field, AssertMessage.field_name_null_message);
-		AccessibleObject colling = MetaAccessorUtil.findGetterMeta(bean.getClass(), field, Access.PRIVATE);
+		AccessibleObject colling = MetaAccessorUtil.findGetterMeta(bean.getClass(), field, ReflectionAccess.PRIVATE);
 		Assertion.notNull(colling, AssertMessage.unbounded_key_message + " " + field);
 		return getProperty(bean, colling, level);
 	}
 	
-	public static <T> T getProperty(Object bean,AccessibleObject colling,Access level) {
+	public static <T> T getProperty(Object bean,AccessibleObject colling,ReflectionAccess level) {
 		Assertion.notNull(colling, AssertMessage.field_object_null_message );
 		try {
 			if (colling instanceof Method) {
@@ -94,7 +94,7 @@ public class PropertyAccessorUtil{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T> T getProperty(Object bean,Method colling, Access access) {
+	public static <T> T getProperty(Object bean,Method colling, ReflectionAccess access) {
 		Assertion.notNull(colling, AssertMessage.field_object_null_message );
 		Assertion.isTrue(!access.isAccess(colling.getModifiers()), AssertMessage.ILLEgGAL_ACCESS_MSG + " " + colling.getName());
 		try {
@@ -107,7 +107,7 @@ public class PropertyAccessorUtil{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T> T getProperty(Object bean,Field colling, Access access) {
+	public static <T> T getProperty(Object bean,Field colling, ReflectionAccess access) {
 		Assertion.notNull(colling, AssertMessage.field_object_null_message );
 		Assertion.isTrue(!access.isAccess(colling.getModifiers()), AssertMessage.ILLEgGAL_ACCESS_MSG + " " + colling.getName());
 		try {
@@ -131,7 +131,7 @@ public class PropertyAccessorUtil{
 		return null;
 	}
 
-	public static Boolean isProperty(Object bean, String field, Access level) {
+	public static Boolean isProperty(Object bean, String field, ReflectionAccess level) {
 		Assertion.notNull(field, AssertMessage.field_name_null_message);
 		try {
 			return CastingUtil.boolValue(getProperty(bean, field, level));
@@ -140,15 +140,15 @@ public class PropertyAccessorUtil{
 		return false;
 	}
 
-	public static Field getType(Object bean, String field, Access level) {
+	public static Field getType(Object bean, String field, ReflectionAccess level) {
 		return FieldUtil.getField(bean.getClass(), field, level);
 	}
 
 	public static Map<String, Object> getProperties(Object bean) {
-		return getProperties(bean, Access.PUBLIC);
+		return getProperties(bean, ReflectionAccess.PUBLIC);
 	}
 
-	public static Map<String, Object> getProperties(Object bean, Access level) {
+	public static Map<String, Object> getProperties(Object bean, ReflectionAccess level) {
 		Map<String, Object> properties = new LinkedHashMap<>();
 		for (String _key : MetaAccessorUtil.getNamePropertiesMeta(bean.getClass(), level)) {
 			properties.put(_key, getProperty(bean, _key, level));
@@ -157,10 +157,10 @@ public class PropertyAccessorUtil{
 	}
 
 	public static Map<String, Object> setProperties(Object bean, Map<String, Object> _map) {
-		return setProperties(bean, _map, Access.PUBLIC);
+		return setProperties(bean, _map, ReflectionAccess.PUBLIC);
 	}
 
-	public static Map<String, Object> setProperties(Object bean, Map<String, Object> _map, Access level) {
+	public static Map<String, Object> setProperties(Object bean, Map<String, Object> _map, ReflectionAccess level) {
 		Map<String, Object> properties = new LinkedHashMap<>();
 		for (String _key : _map.keySet()) {
 			properties.put(_key,setProperty(bean, _key, level, _map.get(_key)));
@@ -169,7 +169,7 @@ public class PropertyAccessorUtil{
 	}
 
 	public static void setSafeProperty(Object bean, String field, Object value) {
-		AccessibleObject colling = MetaAccessorUtil.setPropertyMeta(bean.getClass(), field, Access.PRIVATE, value);
+		AccessibleObject colling = MetaAccessorUtil.setPropertyMeta(bean.getClass(), field, ReflectionAccess.PRIVATE, value);
 		if(colling!=null) {
 			setProperty(bean, colling, value);
 		}

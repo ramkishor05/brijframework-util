@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
-import org.brijframework.util.support.Access;
+import org.brijframework.util.support.ReflectionAccess;
 
 public abstract class ConstructUtil {
 
@@ -20,7 +20,7 @@ public abstract class ConstructUtil {
 		return constructors;
 	}
 
-	public static Constructor<?> getConstructor(Class<?> _class,Access access, Type... types) {
+	public static Constructor<?> getConstructor(Class<?> _class,ReflectionAccess access, Type... types) {
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);
 		for (Constructor<?> constructor : _class.getDeclaredConstructors()) {
 			if(!access.isAccess(constructor.getModifiers())) {

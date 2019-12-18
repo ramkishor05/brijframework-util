@@ -11,7 +11,7 @@ import java.util.Map;
 
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
-import org.brijframework.util.support.Access;
+import org.brijframework.util.support.ReflectionAccess;
 import org.brijframework.util.validator.ValidationUtil;
 
 public abstract class FieldUtil {
@@ -28,7 +28,7 @@ public abstract class FieldUtil {
 	 * @param _accessLevel
 	 * @return Field
 	 */
-	private static Field findField(Field[] _fields, String _field, Access _accessLevel) {
+	private static Field findField(Field[] _fields, String _field, ReflectionAccess _accessLevel) {
 		Assertion.notNull(_fields, AssertMessage.arg_null_message+" fields");
 		Assertion.notNull(_field, AssertMessage.arg_null_message+" field");
 		Assertion.notNull(_accessLevel, AssertMessage.arg_null_message+" accessLevel");
@@ -50,7 +50,7 @@ public abstract class FieldUtil {
 	 * @param _accessLevel
 	 * @return list of field
 	 */
-	private static List<Field> fillFields(Field[] _fields, Access _accessLevel) {
+	private static List<Field> fillFields(Field[] _fields, ReflectionAccess _accessLevel) {
 		Assertion.notNull(_fields, AssertMessage.arg_null_message+" fields");
 		Assertion.notNull(_accessLevel, AssertMessage.arg_null_message+" accessLevel");
 		List<Field> list = new ArrayList<>();
@@ -70,7 +70,7 @@ public abstract class FieldUtil {
 	 */
 	public static List<Field> getAllField(Class<?> _class) {
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);
-		return getAllField(_class, Access.PUBLIC);
+		return getAllField(_class, ReflectionAccess.PUBLIC);
 	}
 
 	/**
@@ -83,7 +83,7 @@ public abstract class FieldUtil {
 	public static Field getField(Class<?> _class, String _field) {
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);
 		Assertion.notNull(_field, AssertMessage.field_name_null_message);
-		return getField(_class,_field,Access.PUBLIC);
+		return getField(_class,_field,ReflectionAccess.PUBLIC);
 	}
 
 	/**
@@ -109,7 +109,7 @@ public abstract class FieldUtil {
 	 * @param _accessLevel
 	 * @return List of String
 	 */
-	public static List<String> getFieldList(Class<?> _class, Access _accessLevel) {
+	public static List<String> getFieldList(Class<?> _class, ReflectionAccess _accessLevel) {
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);
 		Collection<Field> collection = getAllField(_class, _accessLevel);
 		return LogicUnit.collectionMethod(collection, field_getName);
@@ -127,7 +127,7 @@ public abstract class FieldUtil {
 	 * @param _accessLevel
 	 * @return Field
 	 */
-	public static Field getField(Class<?> _class, String _field, Access _accessLevel) {
+	public static Field getField(Class<?> _class, String _field, ReflectionAccess _accessLevel) {
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);
 		Assertion.notNull(_field, AssertMessage.field_name_null_message);
 		Field field = findField(_class.getDeclaredFields(), _field, _accessLevel);
@@ -145,7 +145,7 @@ public abstract class FieldUtil {
 		return null;
 	}
 
-	public static Map<String,Field> getAllFieldMap(Class<?> _class, Access _accessLevel) {
+	public static Map<String,Field> getAllFieldMap(Class<?> _class, ReflectionAccess _accessLevel) {
 		List<Field> fields= getAllField(_class, _accessLevel);
 		Map<String,Field> properties=new HashMap<>();
 		for(Field field:fields) {
@@ -164,7 +164,7 @@ public abstract class FieldUtil {
 	 * @param _accessLevel
 	 * @return List of Field
 	 */
-	public static List<Field> getAllField(Class<?> _class, Access _accessLevel) {
+	public static List<Field> getAllField(Class<?> _class, ReflectionAccess _accessLevel) {
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);
 		List<Field> list = new ArrayList<>();
 		list.addAll(fillFields(_class.getDeclaredFields(), _accessLevel));
@@ -178,11 +178,11 @@ public abstract class FieldUtil {
 	
 	public static List<Field> getAllManyRelField(Class<?> _class) {
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);
-		return getAllManyRelField(_class,Access.PUBLIC);
+		return getAllManyRelField(_class,ReflectionAccess.PUBLIC);
 	}
 
 	
-	public static List<Field> getAllManyRelField(Class<?> _class,Access accessLevel) {
+	public static List<Field> getAllManyRelField(Class<?> _class,ReflectionAccess accessLevel) {
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);
 		List<Field> fields=new LinkedList<>();
 		for(Field field:getAllField(_class,accessLevel)){
@@ -194,7 +194,7 @@ public abstract class FieldUtil {
 	}
 
 	
-	public static List<Field> getAllOneRelField(Class<?> _class, Access accessLevel) {
+	public static List<Field> getAllOneRelField(Class<?> _class, ReflectionAccess accessLevel) {
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);
 		List<Field> fields=new LinkedList<>();
 		for(Field field:getAllField(_class,accessLevel)){
@@ -207,10 +207,10 @@ public abstract class FieldUtil {
 	
 	public static List<Field> getAllPrimativeField(Class<?> _class) {
 		Assertion.notNull(_class,AssertMessage. class_object_null_message);
-		return getAllPrimativeField(_class, Access.PUBLIC);
+		return getAllPrimativeField(_class, ReflectionAccess.PUBLIC);
 	}
 	
-	public static List<Field> getAllPrimativeField(Class<?> _class, Access accessLevel) {
+	public static List<Field> getAllPrimativeField(Class<?> _class, ReflectionAccess accessLevel) {
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);
 		List<Field> fields=new LinkedList<>();
 		for(Field field:getAllField(_class,accessLevel)){
@@ -223,10 +223,10 @@ public abstract class FieldUtil {
 	
 	public static List<Field> getAllRelField(Class<?> _class){
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);
-		return getAllRelField(_class,Access.PUBLIC);
+		return getAllRelField(_class,ReflectionAccess.PUBLIC);
 	}
 
-	public static List<Field> getAllRelField(Class<?> _class, Access accessLevel) {
+	public static List<Field> getAllRelField(Class<?> _class, ReflectionAccess accessLevel) {
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);
 		List<Field> fields=new LinkedList<>();
 		for(Field field:getAllField(_class,accessLevel)){

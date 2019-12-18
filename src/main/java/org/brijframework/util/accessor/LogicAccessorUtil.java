@@ -5,15 +5,15 @@ import java.lang.reflect.Method;
 
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
-import org.brijframework.util.support.Access;
+import org.brijframework.util.support.ReflectionAccess;
 
 public class LogicAccessorUtil{
 
 	public static Object callLogic(Object bean,String method, Object... paramObjects) {
-		return callLogic(bean,method,Access.PUBLIC, paramObjects);
+		return callLogic(bean,method,ReflectionAccess.PUBLIC, paramObjects);
 	}
 	
-	public static Object callLogic(Object bean,String method, Access access,Object... paramObjects) {
+	public static Object callLogic(Object bean,String method, ReflectionAccess access,Object... paramObjects) {
 		Method collMethod = MetaAccessorUtil.getLogicMeta(bean.getClass(),method, access,paramObjects);
 		return callLogic(bean,collMethod, paramObjects);
 	}

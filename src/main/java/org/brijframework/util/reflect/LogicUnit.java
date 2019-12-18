@@ -14,7 +14,7 @@ import java.util.Map;
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
 import org.brijframework.util.casting.CastingUtil;
-import org.brijframework.util.support.Access;
+import org.brijframework.util.support.ReflectionAccess;
 import org.brijframework.util.validator.ValidationUtil;
 
 public abstract class LogicUnit {
@@ -134,7 +134,7 @@ public abstract class LogicUnit {
 		return setField(_object, _field, _param);
 	}
 
-	public static <T> T setField(Object object, String property, Object param, Access accessLevel) {
+	public static <T> T setField(Object object, String property, Object param, ReflectionAccess accessLevel) {
 		Field field = FieldUtil.getField(object.getClass(), property, accessLevel);
 		return setField(object, field, param);
 	}

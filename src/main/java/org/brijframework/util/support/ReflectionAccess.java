@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public enum Access {
+public enum ReflectionAccess {
 	NONE(0x000),
 	//PUBLIC(0x001),
 	//PROTECTED(0x002),
@@ -48,7 +48,7 @@ public enum Access {
 	
 	int id;
 
-	private Access(int ID) {
+	private ReflectionAccess(int ID) {
 		this.id = ID;
 	}
 
@@ -188,8 +188,8 @@ public enum Access {
 		return this.id;
 	}
 
-	public static Access valueOf(int modifiers) {
-		for(Access access: values()) {
+	public static ReflectionAccess valueOf(int modifiers) {
+		for(ReflectionAccess access: values()) {
 			if(access.getID()==modifiers) {
 				return access;
 			}

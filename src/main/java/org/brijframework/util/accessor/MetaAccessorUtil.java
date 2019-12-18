@@ -20,17 +20,17 @@ import org.brijframework.util.asserts.Assertion;
 import org.brijframework.util.reflect.FieldUtil;
 import org.brijframework.util.reflect.MethodUtil;
 import org.brijframework.util.reflect.ParamUtil;
-import org.brijframework.util.support.Access;
+import org.brijframework.util.support.ReflectionAccess;
 import org.brijframework.util.validator.ValidationUtil;
 
 public class MetaAccessorUtil {
 
 	public static AccessibleObject getPropertyMeta(Class<?> meta, String field) {
 		Assertion.notNull(field, AssertMessage.field_name_null_message);
-		return findGetterMeta(meta, field, Access.PUBLIC);
+		return findGetterMeta(meta, field, ReflectionAccess.PUBLIC);
 	}
 
-	public static AccessibleObject findGetterMeta(Class<?> meta, String field, Access level) {
+	public static AccessibleObject findGetterMeta(Class<?> meta, String field, ReflectionAccess level) {
 		Assertion.notNull(field, AssertMessage.field_name_null_message);
 		try {
 			Method getter = getterPropertyDescriptor(meta, field);
@@ -41,10 +41,10 @@ public class MetaAccessorUtil {
 	}
 
 	public static AccessibleObject setPropertyMeta(Class<?> meta, String field, Object value) {
-		return setPropertyMeta(meta, field, Access.PUBLIC, value);
+		return setPropertyMeta(meta, field, ReflectionAccess.PUBLIC, value);
 	}
 
-	public  static AccessibleObject findSetterMeta(Class<?> meta, String field, Access level) {
+	public  static AccessibleObject findSetterMeta(Class<?> meta, String field, ReflectionAccess level) {
 		Assertion.notNull(field, AssertMessage.field_name_null_message);
 		try {
 			Method setter = setterPropertyDescriptor(meta, field);
@@ -54,7 +54,7 @@ public class MetaAccessorUtil {
 		}
 	}
 	
-	public  static AccessibleObject setPropertyMeta(Class<?> meta, String field, Access level, Object value) {
+	public  static AccessibleObject setPropertyMeta(Class<?> meta, String field, ReflectionAccess level, Object value) {
 		Assertion.notNull(field, AssertMessage.field_name_null_message);
 		try {
 			Method setter = setterPropertyDescriptor(meta, field, value);
@@ -65,7 +65,7 @@ public class MetaAccessorUtil {
 	}
 
 	public static List<AccessibleObject> getPropertiesMeta(Class<?> meta) {
-		return getPropertiesMeta(meta, Access.PUBLIC);
+		return getPropertiesMeta(meta, ReflectionAccess.PUBLIC);
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class MetaAccessorUtil {
 	 * 
 	 * @return
 	 */
-	public static List<AccessibleObject> getPropertiesMeta(Class<?> meta, Access level) {
+	public static List<AccessibleObject> getPropertiesMeta(Class<?> meta, ReflectionAccess level) {
 		List<AccessibleObject> properties = new ArrayList<>();
 		BeanInfo beaninfo = null;
 		try {
@@ -99,10 +99,10 @@ public class MetaAccessorUtil {
 
 	public static Method getLogicMeta(Class<?> meta, String _method, Object... params) {
 		Assertion.notNull(_method, AssertMessage.method_name_null_message);
-		return getLogicMeta(meta, _method, Access.PUBLIC, params);
+		return getLogicMeta(meta, _method, ReflectionAccess.PUBLIC, params);
 	}
 
-	public static Method getLogicMeta(Class<?> meta, String _method, Access level, Object... paramObjects) {
+	public static Method getLogicMeta(Class<?> meta, String _method, ReflectionAccess level, Object... paramObjects) {
 		Assertion.notNull(_method, AssertMessage.method_name_null_message);
 		try {
 			Method method = (Method) getMethodDescriptor(meta, _method, paramObjects);
@@ -129,7 +129,7 @@ public class MetaAccessorUtil {
 				return getterMethod;
 			}
 		}
-		return getMethodMeta(_meta, Access.PUBLIC, _name, 0);
+		return getMethodMeta(_meta, ReflectionAccess.PUBLIC, _name, 0);
 	}
 
 	public static Method setterPropertyMeta(Class<?> _meta, String _name, Object value){
@@ -159,7 +159,7 @@ public class MetaAccessorUtil {
 				return setterMethod;
 			}
 		}
-		return getMethodMeta(_meta, Access.PUBLIC, _name, 1);
+		return getMethodMeta(_meta, ReflectionAccess.PUBLIC, _name, 1);
 	}
 	
     public static Map<String, Method> setterPropertyDescriptorList(Class<?> _meta) {
@@ -216,10 +216,10 @@ public class MetaAccessorUtil {
 				return method;
 			}
 		}
-		return methods.size() > 0 ? methods.get(0) : getMethodMeta(_meta, Access.PUBLIC, _name, 1);
+		return methods.size() > 0 ? methods.get(0) : getMethodMeta(_meta, ReflectionAccess.PUBLIC, _name, 1);
 	}
 
-	public static Field findFieldMeta(Class<?> _meta, String _name, Access access) {
+	public static Field findFieldMeta(Class<?> _meta, String _name, ReflectionAccess access) {
 		try {
 			return FieldUtil.getField(_meta, _name, access);
 		} catch (SecurityException e) {
@@ -241,7 +241,7 @@ public class MetaAccessorUtil {
 		return null;
 	}
 
-	public static Method getMethodMeta(Class<?> _meta, Access level, String _name, Object... params) {
+	public static Method getMethodMeta(Class<?> _meta, ReflectionAccess level, String _name, Object... params) {
 		try {
 			return MethodUtil.getMethod(_meta, _name, level, params);
 		} catch (SecurityException e) {
@@ -249,7 +249,7 @@ public class MetaAccessorUtil {
 		}
 	}
 
-	public static Method getMethodMeta(Class<?> _meta, Access level, String _name, int params) {
+	public static Method getMethodMeta(Class<?> _meta, ReflectionAccess level, String _name, int params) {
 		try {
 			return MethodUtil.getMethod(_meta, _name, params, level);
 		} catch (SecurityException e) {
@@ -259,12 +259,12 @@ public class MetaAccessorUtil {
 
 	public static Set<String> getNamePropertiesMeta(Class<?> meta) {
 		Assertion.notNull(meta, "meta clas not be null");
-		return getNamePropertiesMeta(meta, Access.PUBLIC);
+		return getNamePropertiesMeta(meta, ReflectionAccess.PUBLIC);
 	}
 
-	public static Set<String> getNamePropertiesMeta(Class<?> meta, Access level) {
+	public static Set<String> getNamePropertiesMeta(Class<?> meta, ReflectionAccess level) {
 		Set<String> properties = new LinkedHashSet<>();
-		for (Field field : FieldUtil.getAllField(meta,Access.PRIVATE)) {
+		for (Field field : FieldUtil.getAllField(meta,ReflectionAccess.PRIVATE)) {
 			if (level.isAccess(field.getModifiers())) {
 				properties.add(field.getName());
 			}
@@ -273,10 +273,10 @@ public class MetaAccessorUtil {
 	}
 
 	public static Set<String> getNameLogicsMeta(Class<?> meta) {
-		return getNamePropertiesMeta(meta, Access.PUBLIC);
+		return getNamePropertiesMeta(meta, ReflectionAccess.PUBLIC);
 	}
 
-	public Set<String> getNameLogicsMeta(Class<?> meta, Access level) {
+	public Set<String> getNameLogicsMeta(Class<?> meta, ReflectionAccess level) {
 		Set<String> properties = new LinkedHashSet<>();
 		for (Method field : MethodUtil.getAllMethod(meta, level)) {
 			properties.add(field.getName());
@@ -285,10 +285,10 @@ public class MetaAccessorUtil {
 	}
 
 	public static Set<Method> getLogicsMeta(Class<?> meta) {
-		return getLogicsMeta(meta, Access.PUBLIC);
+		return getLogicsMeta(meta, ReflectionAccess.PUBLIC);
 	}
 
-	public static Set<Method> getLogicsMeta(Class<?> meta, Access level) {
+	public static Set<Method> getLogicsMeta(Class<?> meta, ReflectionAccess level) {
 		Set<Method> properties = new LinkedHashSet<>();
 		for (Method field : MethodUtil.getAllMethod(meta, level)) {
 			properties.add(field);

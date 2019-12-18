@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.brijframework.util.accessor.PropertyAccessorUtil;
 import org.brijframework.util.reflect.FieldUtil;
-import org.brijframework.util.support.Access;
+import org.brijframework.util.support.ReflectionAccess;
 import org.brijframework.util.validator.ValidationUtil;
 
 public class PrintUtil {
@@ -16,7 +16,7 @@ public class PrintUtil {
 	public static String getObjectInfo(Object object) {
 		StringBuilder builder=new StringBuilder(object.getClass().getSimpleName()+"#"+object.hashCode());
 		builder.append("(");
-		List<Field> fields=FieldUtil.getAllField(object.getClass(),Access.PRIVATE_NO_STATIC_FINAL);
+		List<Field> fields=FieldUtil.getAllField(object.getClass(),ReflectionAccess.PRIVATE_NO_STATIC_FINAL);
 		int len=fields.size();
 		for (Field field : fields) {
 			Object value=PropertyAccessorUtil.getProperty(object, field);

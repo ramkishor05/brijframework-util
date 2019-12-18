@@ -14,7 +14,7 @@ import java.util.Set;
 
 import org.brijframework.util.accessor.PropertyAccessorUtil;
 import org.brijframework.util.reflect.InstanceUtil;
-import org.brijframework.util.support.Access;
+import org.brijframework.util.support.ReflectionAccess;
 import org.brijframework.util.validator.ValidationUtil;
 
 public class GraphPrinter {
@@ -84,7 +84,7 @@ public class GraphPrinter {
 		}
 		Object t=object;
 		if(ValidationUtil.isBrijClass(object)) {
-			t=PropertyAccessorUtil.getProperties(object,Access.PRIVATE_NO_STATIC_FINAL);
+			t=PropertyAccessorUtil.getProperties(object,ReflectionAccess.PRIVATE_NO_STATIC_FINAL);
 		}
 		if (t instanceof Map && tab == 0) {
 			tab = 1;

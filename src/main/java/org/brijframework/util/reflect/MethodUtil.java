@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.brijframework.util.asserts.AssertMessage;
 import org.brijframework.util.asserts.Assertion;
-import org.brijframework.util.support.Access;
+import org.brijframework.util.support.ReflectionAccess;
 import org.brijframework.util.text.StringUtil;
 
 public abstract class MethodUtil {
@@ -27,7 +27,7 @@ public abstract class MethodUtil {
 		return false;
 	}
 
-	public static List<Method> fillMethods(Method[] methods, Access _accessLevel, Class<?>... _classes) {
+	public static List<Method> fillMethods(Method[] methods, ReflectionAccess _accessLevel, Class<?>... _classes) {
 		Assertion.notNull(methods, AssertMessage.arg_null_message + " methods");
 		List<Method> returnList = new LinkedList<>();
 		for (Method method : methods) {
@@ -40,7 +40,7 @@ public abstract class MethodUtil {
 		return returnList;
 	}
 
-	private static Collection<Method> fillMethods(Method[] methods, Access _accessLevel) {
+	private static Collection<Method> fillMethods(Method[] methods, ReflectionAccess _accessLevel) {
 		Assertion.notNull(methods, AssertMessage.arg_null_message + " methods");
 		List<Method> returnList = new LinkedList<>();
 		for (Method method : methods) {
@@ -62,7 +62,7 @@ public abstract class MethodUtil {
 		return returnList;
 	}
 
-	private static Collection<Method> findMethod(Method[] methods, String _method, Access _accessLevel) {
+	private static Collection<Method> findMethod(Method[] methods, String _method, ReflectionAccess _accessLevel) {
 		Assertion.notNull(methods, AssertMessage.arg_null_message + " methods");
 		Assertion.notNull(_method, AssertMessage.method_name_null_message);
 		List<Method> returnList = new LinkedList<>();
@@ -76,7 +76,7 @@ public abstract class MethodUtil {
 		return returnList;
 	}
 
-	private static List<Method> findMethod(Method[] methods, Access _accessLevel, String _method,
+	private static List<Method> findMethod(Method[] methods, ReflectionAccess _accessLevel, String _method,
 			Class<?>... _classes) {
 		Assertion.notNull(methods, AssertMessage.arg_null_message + " methods");
 		Assertion.notNull(_method, AssertMessage.method_name_null_message);
@@ -93,7 +93,7 @@ public abstract class MethodUtil {
 		return returnList;
 	}
 
-	private static Method findMethod(Method[] methods, String _method, Access _accessLevel, Class<?>... _classes) {
+	private static Method findMethod(Method[] methods, String _method, ReflectionAccess _accessLevel, Class<?>... _classes) {
 		Assertion.notNull(methods, AssertMessage.arg_null_message + " methods");
 		Assertion.notNull(_method, AssertMessage.method_name_null_message);
 		for (Method method : methods) {
@@ -148,7 +148,7 @@ public abstract class MethodUtil {
 	public static Method getMethod(Class<?> _class, String _method, Object... _param) {
 		Assertion.notNull(_class, AssertMessage.class_name_null_message);
 		Assertion.notNull(_method, AssertMessage.method_name_null_message);
-		return getMethod(_class, _method, Access.PUBLIC, _param);
+		return getMethod(_class, _method, ReflectionAccess.PUBLIC, _param);
 	}
 
 	/**
@@ -162,7 +162,7 @@ public abstract class MethodUtil {
 	 * @return Field
 	 * @category tested
 	 */
-	public static Method getMethod(Class<?> _class, String _method, Access _accessLevel, Class<?>... _classes) {
+	public static Method getMethod(Class<?> _class, String _method, ReflectionAccess _accessLevel, Class<?>... _classes) {
 		Assertion.notNull(_class, AssertMessage.class_name_null_message);
 		Assertion.notNull(_method, AssertMessage.method_name_null_message);
 		Method returnMethod = findMethod(_class.getDeclaredMethods(), _method, _accessLevel, _classes);
@@ -191,7 +191,7 @@ public abstract class MethodUtil {
 	 * @return Field
 	 * @category tested
 	 */
-	public static Method getMethod(Class<?> _class, String _method, Access _accessLevel, Object... _param) {
+	public static Method getMethod(Class<?> _class, String _method, ReflectionAccess _accessLevel, Object... _param) {
 		Assertion.notNull(_class, AssertMessage.class_name_null_message);
 		Assertion.notNull(_method, AssertMessage.method_name_null_message);
 		return getMethod(_class, _method, _accessLevel, ParamUtil.paramClasses(_param));
@@ -206,7 +206,7 @@ public abstract class MethodUtil {
 	 */
 	public static Collection<Method> getAllMethod(Class<?> _class) {
 		Assertion.notNull(_class, AssertMessage.class_name_null_message);
-		return getAllMethod(_class, Access.PUBLIC);
+		return getAllMethod(_class, ReflectionAccess.PUBLIC);
 	}
 
 	/**
@@ -220,7 +220,7 @@ public abstract class MethodUtil {
 	 * @return List<Method>
 	 * @category tested
 	 */
-	public static Collection<Method> getAllMethod(Class<?> _class, Access _accessLevel) {
+	public static Collection<Method> getAllMethod(Class<?> _class, ReflectionAccess _accessLevel) {
 		Assertion.notNull(_class, AssertMessage.class_name_null_message);
 		Collection<Method> returnMethods = new LinkedList<>();
 		returnMethods.addAll(fillMethods(_class.getDeclaredMethods(), _accessLevel));
@@ -244,7 +244,7 @@ public abstract class MethodUtil {
 	 * @return List<Method>
 	 * @category tested
 	 */
-	public static List<Method> getAllOverloadMethod(Class<?> _class, String _method, Access _accessLevel) {
+	public static List<Method> getAllOverloadMethod(Class<?> _class, String _method, ReflectionAccess _accessLevel) {
 		Assertion.notNull(_class, AssertMessage.class_name_null_message);
 		List<Method> returnMethods = new LinkedList<>();
 		returnMethods.addAll(findMethod(_class.getDeclaredMethods(), _method, _accessLevel));
@@ -256,7 +256,7 @@ public abstract class MethodUtil {
 		return returnMethods;
 	}
 
-	public static Method getMethod(Class<?> _class, String _method, int params, Access _accessLevel) {
+	public static Method getMethod(Class<?> _class, String _method, int params, ReflectionAccess _accessLevel) {
 		Assertion.notNull(_class, AssertMessage.class_name_null_message);
 		Assertion.notNull(_method, AssertMessage.method_name_null_message);
 		for (Method method : getAllOverloadMethod(_class, _method, _accessLevel)) {
@@ -279,7 +279,7 @@ public abstract class MethodUtil {
 	 * @return List<Method>
 	 * @category tested
 	 */
-	public static List<Method> getAllOverrideMethod(Class<?> _class, String _method, Access _accessLevel,
+	public static List<Method> getAllOverrideMethod(Class<?> _class, String _method, ReflectionAccess _accessLevel,
 			Object... _param) {
 		Assertion.notNull(_class, AssertMessage.class_name_null_message);
 		Assertion.notNull(_method, AssertMessage.method_name_null_message);
@@ -384,7 +384,7 @@ public abstract class MethodUtil {
 		return false;
 	}
 
-	public static Method findMethod(Class<?> _class, String _method, Access _accessLevel, Class<?>... paramClasses) {
+	public static Method findMethod(Class<?> _class, String _method, ReflectionAccess _accessLevel, Class<?>... paramClasses) {
 		List<Method> methods = getAllOverloadMethod(_class, _method, _accessLevel);
 		if (methods.size() > 0) {
 			return methods.get(0);
