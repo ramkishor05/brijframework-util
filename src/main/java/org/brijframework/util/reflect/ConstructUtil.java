@@ -20,7 +20,7 @@ public abstract class ConstructUtil {
 		return constructors;
 	}
 
-	public static Constructor<?> getConstructor(Class<?> _class,ReflectionAccess access, Type... types) {
+	public static Constructor<?> getConstructor(Class<?> _class, ReflectionAccess access, Type... types) {
 		Assertion.notNull(_class, AssertMessage.class_object_null_message);
 		for (Constructor<?> constructor : _class.getDeclaredConstructors()) {
 			if(!access.isAccess(constructor.getModifiers())) {

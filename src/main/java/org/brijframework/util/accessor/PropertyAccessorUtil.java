@@ -20,21 +20,21 @@ public class PropertyAccessorUtil{
 		return setProperty(bean, field, ReflectionAccess.PUBLIC, value);
 	}
 	
-	public static <T> T setProperty(Object bean, String field, ReflectionAccess level, Object value) {
+	public static <T> T setProperty(Object bean, String field, ReflectionAccess access, Object value) {
 		Assertion.notNull(field, AssertMessage.arg_null_message);
 		AccessibleObject colling = MetaAccessorUtil.setPropertyMeta(bean.getClass(), field, ReflectionAccess.PRIVATE, value);
 		Assertion.notNull(colling, AssertMessage.unbounded_key_message + " " + field + " for " + bean.getClass());
-		return setProperty(bean, colling,value);
+		return setProperty(bean, colling,access,value);
 	}
 
-	public static <T> T setProperty(Object bean, AccessibleObject colling, Object value) {
+	public static <T> T setProperty(Object bean, AccessibleObject colling,ReflectionAccess access, Object value) {
 		Assertion.notNull(colling, AssertMessage.arg_null_message);
 		try {
 			if (colling instanceof Method) {
-				return setProperty(bean, (Method) colling, value);
+				return setProperty(bean, (Method) colling,access, value);
 			}
 			if (colling instanceof Field) {
-				return setProperty(bean, (Field) colling, value);
+				return setProperty(bean, (Field) colling,access, value);
 			}
 			return null;
 		} catch (IllegalArgumentException e) {
@@ -43,8 +43,10 @@ public class PropertyAccessorUtil{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T> T setProperty(Object bean, Method colling, Object value) {
+	public static <T> T setProperty(Object bean, Method colling,ReflectionAccess access,  Object value) {
 		Assertion.notNull(colling, AssertMessage.arg_null_message);
+		Assertion.isTrue(!access.isAccess(colling.getModifiers()), AssertMessage.ILLEgGAL_ACCESS_MSG + " " + colling.getName());
+
 		try {
 			colling.setAccessible(true);
 			colling.invoke(bean, CastingUtil.castObject(value, colling.getParameterTypes()[0]));
@@ -55,13 +57,16 @@ public class PropertyAccessorUtil{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T> T setProperty(Object bean, Field colling, Object value) {
+	public static <T> T setProperty(Object bean, Field colling, ReflectionAccess access, Object value) {
 		Assertion.notNull(colling, AssertMessage.arg_null_message);
+		Assertion.isTrue(!access.isAccess(colling.getModifiers()), AssertMessage.ILLEgGAL_ACCESS_MSG + " " + colling.getName());
+
 		try {
 			colling.setAccessible(true);
 			colling.set(bean, CastingUtil.castObject(value, colling.getType()));
 			return (T) value;
 		} catch (IllegalAccessException | IllegalArgumentException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -171,7 +176,7 @@ public class PropertyAccessorUtil{
 	public static void setSafeProperty(Object bean, String field, Object value) {
 		AccessibleObject colling = MetaAccessorUtil.setPropertyMeta(bean.getClass(), field, ReflectionAccess.PRIVATE, value);
 		if(colling!=null) {
-			setProperty(bean, colling, value);
+			setProperty(bean, colling, ReflectionAccess.PUBLIC, value);
 		}
 	}
 

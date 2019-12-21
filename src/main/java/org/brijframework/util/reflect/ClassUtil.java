@@ -55,9 +55,33 @@ public abstract class ClassUtil {
 	public ClassUtil() {
 	}
 
-	public static boolean isClass(String className) {
+	public static boolean isClass(String _className) {
+		if(_className==null) {
+			return false;
+		}
+		if(char.class.getName().equals(_className)) {
+			return true;
+		}
+		if(byte.class.getName().equals(_className)) {
+			return true;
+		}
+		if(short.class.getName().equals(_className)) {
+			return true;
+		}
+		if(int.class.getName().equals(_className)) {
+			return true;
+		}
+		if(long.class.getName().equals(_className)) {
+			return true;
+		}
+		if(double.class.getName().equals(_className)) {
+			return true;
+		}
+		if(float.class.getName().equals(_className)) {
+			return true;
+		}
 	    try  {
-	        Class.forName(className);
+	        Class.forName(_className);
 	        return true;
 	    }  catch (ClassNotFoundException e) {
 	        return false;
@@ -72,6 +96,28 @@ public abstract class ClassUtil {
 	 */
 	public static Class<?> getClass(String _className) {
 		Assertion.notNull(_className, AssertMessage.class_name_null_message);
+		if(char.class.getName().equals(_className)) {
+			return char.class;
+		}
+		if(byte.class.getName().equals(_className)) {
+			return byte.class;
+		}
+		if(short.class.getName().equals(_className)) {
+			return short.class;
+		}
+		if(int.class.getName().equals(_className)) {
+			return int.class;
+		}
+		if(long.class.getName().equals(_className)) {
+			return long.class;
+		}
+		if(double.class.getName().equals(_className)) {
+			return double.class;
+		}
+		if(float.class.getName().equals(_className)) {
+			return float.class;
+		}
+		
 		try {
 			return Class.forName(_className);
 		} catch (ClassNotFoundException e) {
