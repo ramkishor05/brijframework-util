@@ -6,10 +6,8 @@ org\brijframework\util\text\StringUtil.class
 org\brijframework\util\accessor\MetaAccessorUtil.class
 org\brijframework\util\location\StreamUtil.class
 org\brijframework\util\reflect\ConstructUtil.class
-org\brijframework\util\reflect\PackUtil.class
 org\brijframework\util\runtime\WatchUtil.class
 org\brijframework\util\resouces\XMLUtil.class
-org\brijframework\util\resouces\FilterUtil$5.class
 org\brijframework\util\meta\PointUtil.class
 org\brijframework\util\casting\TimeUtil.class
 org\brijframework\util\location\StreamUtil$NonClosingInputStream.class
@@ -27,7 +25,6 @@ org\brijframework\util\runtime\PreferencesUtil.class
 org\brijframework\util\runtime\ThreadUtil.class
 org\brijframework\util\runtime\LogUtil.class
 org\brijframework\util\resouces\ResourcesUtil.class
-org\brijframework\util\location\DirUtil$1.class
 org\brijframework\util\resouces\CSVUtil.class
 org\brijframework\util\asserts\Assertion.class
 org\brijframework\util\objects\ObjectUtil.class

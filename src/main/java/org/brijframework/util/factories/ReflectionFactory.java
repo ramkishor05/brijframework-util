@@ -24,8 +24,12 @@ public final class ReflectionFactory {
 	private static final String INTERNAL_CLASS="INTERNAL_CLASS";
 	private static final String EXTERNAL_CLASS="EXTERNAL_CLASS";
 	
-	
 	private ConcurrentHashMap<String, Set<Class<?>>> cache=new ConcurrentHashMap<>();
+	
+	{
+		getCache().put(INTERNAL_CLASS,new HashSet<>());
+		getCache().put(EXTERNAL_CLASS,new HashSet<>());
+	}
 	
 	private static  ReflectionFactory factory;
 	
@@ -39,10 +43,7 @@ public final class ReflectionFactory {
 	
 	private void loadFactory() {
 		try {
-			getClassListFromInternal().forEach(cls->{
-				if(getCache().get(INTERNAL_CLASS)==null) {
-					getCache().put(INTERNAL_CLASS,new HashSet<>());
-				}
+			this.getClassListFromInternal().forEach(cls->{
 				getCache().get(INTERNAL_CLASS).add(cls);
 			});
 		} catch (Exception e) {
@@ -50,9 +51,6 @@ public final class ReflectionFactory {
 		}
 		try {
 			getClassListFromExternal().forEach(cls->{
-				if(getCache().get(EXTERNAL_CLASS)==null) {
-					getCache().put(EXTERNAL_CLASS,new HashSet<>());
-				}
 				getCache().get(EXTERNAL_CLASS).add(cls);
 			});
 		} catch (Exception e) {
@@ -134,7 +132,7 @@ public final class ReflectionFactory {
 	}
 
 
-	public  Set<Class<?>> getClassListFromInternal() {
+	private  Set<Class<?>> getClassListFromInternal() {
 		Set<Class<?>> classes = new HashSet<>();
 		try {
 			getNameListFromInternal().forEach(className -> {
@@ -279,7 +277,7 @@ public final class ReflectionFactory {
 		return classes;
 	}
 	
-	public Set<Class<?>> getClassListFromExternal() throws Exception {
+	private Set<Class<?>> getClassListFromExternal() throws Exception {
 		Set<Class<?>> classes = new HashSet<>();
 		getNameListFromExternal().forEach(className -> {
 			Class<?> cls=getSafeClass(className);
