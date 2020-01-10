@@ -78,10 +78,10 @@ public class StreamUtil {
 			stream = classLoader.getResourceAsStream(stripped);
 		}
 		if (stream == null) {
-			stream = org.omg.CORBA.Environment.class.getResourceAsStream(resource);
+			stream = StreamUtil.class.getResourceAsStream(resource);
 		}
 		if (stream == null) {
-			stream = org.omg.CORBA.Environment.class.getClassLoader().getResourceAsStream(stripped);
+			stream = StreamUtil.class.getClassLoader().getResourceAsStream(stripped);
 		}
 		return stream;
 	}
@@ -101,10 +101,10 @@ public class StreamUtil {
 		}
 
 		if (stream == null) {
-			stream = org.omg.CORBA.Environment.class.getClassLoader().getResourceAsStream(resource);
+			stream = StreamUtil.class.getClassLoader().getResourceAsStream(resource);
 		}
 		if (stream == null && hasLeadingSlash) {
-			stream = org.omg.CORBA.Environment.class.getClassLoader().getResourceAsStream(stripped);
+			stream = StreamUtil.class.getClassLoader().getResourceAsStream(stripped);
 		}
 		return stream;
 	}
